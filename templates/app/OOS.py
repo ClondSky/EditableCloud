@@ -1,7 +1,12 @@
-from requests import request
+# -*- coding: utf-8 -*-
+import requests
+import datetime
+import base64, hmac, hashlib
 
 
 class CloudService(object):
+    __timeFormat__ = "%a, %d %b %G %T GMT"
+
     def __init__(self, host, port, ak, sk):
         self.__host__ = host
         self.__port__ = port
@@ -33,7 +38,23 @@ class CloudService(object):
         self.__sk__
 
     def createBucket(self):
-        pass
+        url = "oos.ctyunapi.cn"
+        myHeader = {
+            "Host": self.__host__,
+            "Content-Length": "0",
+            "Date": self.getDate(),
+            "Authorization": self.authorize("PUT", self.getDate(), "", "")
+        }
+        request = requests.put(url, header=myHeader)
+        return request.headers
 
-    def authorize(httpVerb, date, bucket, objectName):
-        pass
+    def getDate(self):
+        now = datetime.datetime.now()
+        time = now.strftime(self.__timeFormat__)
+        return time
+
+    def authorize(self, httpVerb, date, bucket, objectName):
+        StringToSign = httpVerb + "\n"
+        signature = base64.b64encode(hmac.new(self.__sk__, StringToSign).digest())
+        authorization = "AWS" + self.__ak__ + ":" + signature
+        return authorization
