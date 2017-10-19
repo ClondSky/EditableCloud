@@ -8,17 +8,17 @@ class CloudService(object):
     __timeFormat__ = "%a, %d %b %G %T %z +0800"
     __endPoint__ = "oos.ctyunapi.cn"
 
-    def __init__(self, bucket, port, ak, sk):
-        self.__bucket__ = bucket
+    def __init__(self, host, port, ak, sk):
+        self.__host__ = host
         self.__port__ = port
         self.__ak__ = ak
         self.__sk__ = sk
 
-    def set_bucket(self, bucket):
-        self.__bucket__ = bucket
+    def set_host(self, host):
+        self.__host__ = host
 
-    def get_bucket(self):
-        return self.__bucket__
+    def get_host(self):
+        return self.__host__
 
     def set_port(self, port):
         self.__port__ = port
@@ -38,28 +38,38 @@ class CloudService(object):
     def get_sk(self):
         self.__sk__
 
-    def createBucket(self):
-        url = "http://" + self.__endPoint__
+    def createBucket(self, bucket):
+        url = "http://" + self.__host__
         myHeader = {
-            "Host": self.__bucket__ + "." + self.__endPoint__,
+            "Host": bucket + "." + self.__host__,
             "Content-Length": "0",
-            "Expires": "1241251512412",
             "Date": self.getDate(),
-            "Authorization": self.authorize("PUT", self.getDate(), "")
+            "Authorization": self.authorize("PUT", bucket, self.getDate(), "", "")
         }
         request = requests.put(url, headers=myHeader)
         return request.headers
+
+    def modifyBucketACL(self, acl, bucket):
+        url = "http://" + self.__host__
+        myHeader = {
+            "Host": bucket + "." + self.__host__,
+            "Content-Length": "0",
+            "Date": self.getDate(),
+            "x-amz-acl": acl,
+            "Authorization": self.authorize("PUT", bucket, self.getDate(), "", "x-amz-acl:" + acl)
+        }
+        request = requests.put(url, headers=myHeader)
+        return request.content
 
     def getDate(self):
         now = datetime.datetime.now()
         time = now.strftime(self.__timeFormat__)
         return time
 
-    def authorize(self, httpVerb, date, objectName):
-        CanonicalizedAmzHeaders = ""
-        CanonicalizedResource = "/" + self.__bucket__ + "/" + objectName
+    def authorize(self, httpVerb, bucket, date, objectName, amz):
+        CanonicalizedAmzHeaders = amz+"\n"
+        CanonicalizedResource = "/" + bucket + "/" + objectName
         StringToSign = httpVerb + "\n\n\n" + date + "\n" + CanonicalizedAmzHeaders + CanonicalizedResource
-        print(StringToSign)
         signature = base64.b64encode(
             hmac.new(bytes(self.__sk__, encoding="utf-8"), bytes(StringToSign, encoding="utf-8"), "SHA1").digest())
         authorization = "AWS " + self.__ak__ + ":" + str(signature).split('\'')[1]
