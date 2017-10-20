@@ -38,6 +38,7 @@ class CloudService(object):
     def get_sk(self):
         self.__sk__
 
+    #创建Bucket
     def createBucket(self, bucket):
         url = "http://" + self.__host__
         myHeader = {
@@ -49,6 +50,7 @@ class CloudService(object):
         request = requests.put(url, headers=myHeader)
         return request.headers
 
+    #修改Bucket的权限，即ACL
     def modifyBucketACL(self, acl, bucket):
         url = "http://" + self.__host__
         myHeader = {
