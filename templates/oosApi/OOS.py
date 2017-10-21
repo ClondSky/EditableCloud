@@ -3,6 +3,8 @@ import requests
 import datetime
 import base64, hmac, hashlib
 
+from templates.ResultMessage import ResultMessage
+
 
 class CloudService(object):
     __timeFormat__ = "%a, %d %b %G %T %z +0800"
@@ -38,19 +40,19 @@ class CloudService(object):
     def get_sk(self):
         self.__sk__
 
-    #创建Bucket
+    # 创建Bucket
     def createBucket(self, bucket):
         url = "http://" + self.__host__
         myHeader = {
             "Host": bucket + "." + self.__host__,
             "Content-Length": "0",
             "Date": self.getDate(),
-            "Authorization": self.authorize("PUT", bucket, self.getDate(), "", "")
+            "Authorization": self.authorize("PUT", bucket, self.getDate())
         }
         request = requests.put(url, headers=myHeader)
-        return request.headers
+        return request.content
 
-    #修改Bucket的权限，即ACL
+    # 修改Bucket的权限，即ACL
     def modifyBucketACL(self, acl, bucket):
         url = "http://" + self.__host__
         myHeader = {
@@ -63,15 +65,54 @@ class CloudService(object):
         request = requests.put(url, headers=myHeader)
         return request.content
 
+    # 通过Put方式上传本地文件
+    def uploadLocalFile(self, bucket, objectName, filePath):
+        # 读取文件
+        try:
+            file = open(filePath)
+            content = file.read()
+        except:
+            print("wrong file path")
+            return ResultMessage.FilePathWrong
+        finally:
+            file.close()
+
+        url = "http://" + self.__host__
+        myHeader = {
+            "Host": bucket + "." + self.__host__,
+            "Date": self.getDate(),
+            "Authorization": self.authorize("PUT /" + objectName, bucket, self.getDate(), objectName, "", content,
+                                            "image/jpeg ")
+        }
+        request = requests.put(url, headers=myHeader, data=content.encode("utf-8"))
+        return request.content
+
     def getDate(self):
         now = datetime.datetime.now()
         time = now.strftime(self.__timeFormat__)
         return time
 
-    def authorize(self, httpVerb, bucket, date, objectName, amz):
-        CanonicalizedAmzHeaders = amz+"\n"
+    def authorize(self, httpVerb, bucket, date, objectName="", amz="", content="", contentType=""):
+        CanonicalizedAmzHeaders = ""
         CanonicalizedResource = "/" + bucket + "/" + objectName
-        StringToSign = httpVerb + "\n\n\n" + date + "\n" + CanonicalizedAmzHeaders + CanonicalizedResource
+        content_MD5 = ""
+
+        # amzHeaders
+        if (amz != ""):
+            CanonicalizedAmzHeaders += amz + "\n"
+        # MD5摘要加密
+        if (content != ""):
+            md5 = hashlib.md5()
+            md5.update(content.encode("utf-8"))
+            content_MD5 = md5.hexdigest()
+
+        StringToSign = httpVerb + "\n" \
+                       + content_MD5 + "\n" \
+                       + contentType + "\n" \
+                       + date + "\n" \
+                       + CanonicalizedAmzHeaders + CanonicalizedResource
+
+        print(StringToSign)
         signature = base64.b64encode(
             hmac.new(bytes(self.__sk__, encoding="utf-8"), bytes(StringToSign, encoding="utf-8"), "SHA1").digest())
         authorization = "AWS " + self.__ak__ + ":" + str(signature).split('\'')[1]
