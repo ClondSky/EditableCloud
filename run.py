@@ -18,6 +18,5 @@ app.config['SECRET_KEY'] = 'import_thing'
 def show_posts():
     return render_template('/index.html')
 
-
 if __name__ == '__main__':
     app.run()

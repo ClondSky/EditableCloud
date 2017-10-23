@@ -3,7 +3,7 @@
 from templates.UserDataService.UserDaoService import UserDaoService
 from templates.PO import DB_session
 from templates.PO.User import User
-
+from templates.ResultMessage import ResultMessage
 
 class UserDao(UserDaoService):
     def __init__(self):
@@ -16,6 +16,7 @@ class UserDao(UserDaoService):
             session.commit()
         except:
             print("insertUser wrong")
+            return ResultMessage.InsertUserWrong
         finally:
             session.close()
 
@@ -26,5 +27,6 @@ class UserDao(UserDaoService):
             return user
         except:
             print("getUserByUserName wrong")
+            return ResultMessage.GetUserWrong
         finally:
             session.close()
