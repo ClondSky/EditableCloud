@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import requests
 import datetime
-import base64, hmac, hashlib
+import time
+import urllib
+import base64, hmac
 
 from templates.ResultMessage import ResultMessage
 
@@ -51,7 +53,10 @@ class CloudService(object):
             "Authorization": self.authorize("PUT", bucket, self.getDate())
         }
         request = requests.put(url, headers=myHeader)
-        return request.content
+        if request.status_code == 200:
+            return ResultMessage.Success
+        else:
+            return ResultMessage.Wrong
 
     # 修改Bucket的权限，即ACL
     def modifyBucketACL(self, acl, bucket):
@@ -64,7 +69,10 @@ class CloudService(object):
             "Authorization": self.authorize("PUT", bucket, self.getDate(), "", "x-amz-acl:" + acl)
         }
         request = requests.put(url, headers=myHeader)
-        return request.content
+        if request.status_code == 200:
+            return ResultMessage.Success
+        else:
+            return ResultMessage.Wrong
 
     # 通过Put方式上传本地文件
     def uploadLocalFile(self, bucket, objectName, filePath):
@@ -88,18 +96,49 @@ class CloudService(object):
                                             self.__contentType__[objectName.split(".")[1]])
         }
         request = requests.put(url, headers=myHeader, data=content)
-        return request.content
+        if request.status_code == 200:
+            return ResultMessage.Success
+        else:
+            return ResultMessage.Wrong
 
-    # 分享已上传的Object，URL有效期为一周
-    def shareFile(self, bucket, objectName, expiration):
+    # 下载已上传的Object到本地
+    def dowmloadFile(self, bucket, objectName, filePath):
         url = "http://" + self.__host__ + "/" + objectName
         myHeader = {
             "Host": bucket + "." + self.__host__,
             "Date": self.getDate(),
-            "Authorization": self.authorize("DELETE", bucket, self.getDate(), objectName)
+            "Authorization": self.authorize("GET", bucket, self.getDate(), objectName)
         }
-        request = requests.delete(url, headers=myHeader)
-        return request.content
+        request = requests.get(url, headers=myHeader)
+
+        # 写入文件
+        try:
+            file = open(filePath, "wb")
+            content = request.content
+            file.write(content)
+        except:
+            print("wrong file path")
+            return ResultMessage.FilePathWrong
+        finally:
+            file.close()
+
+        if request.status_code == 200:
+            return ResultMessage.Success
+        else:
+            return ResultMessage.Wrong
+
+    # 分享已上传的Object，URL有效期为一周
+    def shareFile(self, bucket, objectName, expiration):
+        expireTime = str(int(time.time()) + expiration * 24 * 60 * 60)
+        params = urllib.parse.urlencode({
+            "AWSAccessKeyId": self.__ak__,
+            "Expires": expireTime,
+            "Signature": self.authorize("GET", bucket, expireTime, objectName).split(":")[1]
+        })
+        return "http://oos.ctyunapi.cn/" \
+               + bucket \
+               + "/" + objectName \
+               + "?" + params
 
     # 删除已上传的Object
     def deleteFile(self, bucket, objectName):
@@ -109,20 +148,25 @@ class CloudService(object):
             "Date": self.getDate(),
             "Authorization": self.authorize("DELETE", bucket, self.getDate(), objectName)
         }
-        request = requests.put(url, headers=myHeader)
-        return request.content
+        request = requests.delete(url, headers=myHeader)
+        if request.status_code == 200:
+            return ResultMessage.Success
+        else:
+            return ResultMessage.Wrong
 
+    # 获得需要格式的日期
     def getDate(self):
         now = datetime.datetime.now()
         time = now.strftime(self.__timeFormat__)
         return time
 
+    # 计算授权字符串
     def authorize(self, httpVerb, bucket, date, objectName="", amz="", contentType=""):
         CanonicalizedAmzHeaders = ""
         CanonicalizedResource = "/" + bucket + "/" + objectName
 
         # amzHeaders
-        if (amz != ""):
+        if amz != "":
             CanonicalizedAmzHeaders += amz + "\n"
 
         StringToSign = httpVerb + "\n" \
