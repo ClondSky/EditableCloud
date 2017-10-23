@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import requests
 import datetime
-import base64, hmac, hashlib
+import time
+import urllib
+import base64, hmac
 
 from templates.ResultMessage import ResultMessage
 
@@ -92,14 +94,16 @@ class CloudService(object):
 
     # 分享已上传的Object，URL有效期为一周
     def shareFile(self, bucket, objectName, expiration):
-        url = "http://" + self.__host__ + "/" + objectName
-        myHeader = {
-            "Host": bucket + "." + self.__host__,
-            "Date": self.getDate(),
-            "Authorization": self.authorize("DELETE", bucket, self.getDate(), objectName)
-        }
-        request = requests.delete(url, headers=myHeader)
-        return request.content
+        expireTime = str(int(time.time()) + expiration * 24 * 60 * 60)
+        params = urllib.parse.urlencode({
+            "AWSAccessKeyId": self.__ak__,
+            "Expires": expireTime,
+            "Signature": self.authorize("GET", bucket, expireTime, objectName).split(":")[1]
+        })
+        return "http://oos.ctyunapi.cn/" \
+               + bucket \
+               + "/" + objectName \
+               + "?" + params
 
     # 删除已上传的Object
     def deleteFile(self, bucket, objectName):
@@ -109,8 +113,12 @@ class CloudService(object):
             "Date": self.getDate(),
             "Authorization": self.authorize("DELETE", bucket, self.getDate(), objectName)
         }
-        request = requests.put(url, headers=myHeader)
+        request = requests.delete(url, headers=myHeader)
         return request.content
+
+    # 创建一组AK/SK
+    def createAkSk(self):
+        pass
 
     def getDate(self):
         now = datetime.datetime.now()
