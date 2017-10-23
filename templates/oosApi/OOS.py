@@ -7,6 +7,7 @@ from templates.ResultMessage import ResultMessage
 
 
 class CloudService(object):
+    __contentType__ = {"txt": "text/plain", "jpg": "image/jpeg"}
     __timeFormat__ = "%a, %d %b %G %T %z +0800"
     __endPoint__ = "oos.ctyunapi.cn"
 
@@ -82,9 +83,33 @@ class CloudService(object):
             "Host": bucket + "." + self.__host__,
             "Date": self.getDate(),
             "Content-length": str(len(content)),
-            "Authorization": self.authorize("PUT", bucket, self.getDate(), objectName)
+            "Content-Type": self.__contentType__[objectName.split(".")[1]],
+            "Authorization": self.authorize("PUT", bucket, self.getDate(), objectName, "",
+                                            self.__contentType__[objectName.split(".")[1]])
         }
         request = requests.put(url, headers=myHeader, data=content)
+        return request.content
+
+    # 分享已上传的Object，URL有效期为一周
+    def shareFile(self, bucket, objectName, expiration):
+        url = "http://" + self.__host__ + "/" + objectName
+        myHeader = {
+            "Host": bucket + "." + self.__host__,
+            "Date": self.getDate(),
+            "Authorization": self.authorize("DELETE", bucket, self.getDate(), objectName)
+        }
+        request = requests.delete(url, headers=myHeader)
+        return request.content
+
+    # 删除已上传的Object
+    def deleteFile(self, bucket, objectName):
+        url = "http://" + self.__host__ + "/" + objectName
+        myHeader = {
+            "Host": bucket + "." + self.__host__,
+            "Date": self.getDate(),
+            "Authorization": self.authorize("DELETE", bucket, self.getDate(), objectName)
+        }
+        request = requests.put(url, headers=myHeader)
         return request.content
 
     def getDate(self):
@@ -92,7 +117,7 @@ class CloudService(object):
         time = now.strftime(self.__timeFormat__)
         return time
 
-    def authorize(self, httpVerb, bucket, date, objectName="", amz=""):
+    def authorize(self, httpVerb, bucket, date, objectName="", amz="", contentType=""):
         CanonicalizedAmzHeaders = ""
         CanonicalizedResource = "/" + bucket + "/" + objectName
 
@@ -102,7 +127,7 @@ class CloudService(object):
 
         StringToSign = httpVerb + "\n" \
                        + "" + "\n" \
-                       + "" + "\n" \
+                       + contentType + "\n" \
                        + date + "\n" \
                        + CanonicalizedAmzHeaders + CanonicalizedResource
 
