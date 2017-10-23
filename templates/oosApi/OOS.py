@@ -53,7 +53,10 @@ class CloudService(object):
             "Authorization": self.authorize("PUT", bucket, self.getDate())
         }
         request = requests.put(url, headers=myHeader)
-        return request.content
+        if request.status_code == 200:
+            return ResultMessage.Success
+        else:
+            return ResultMessage.Wrong
 
     # 修改Bucket的权限，即ACL
     def modifyBucketACL(self, acl, bucket):
@@ -66,7 +69,10 @@ class CloudService(object):
             "Authorization": self.authorize("PUT", bucket, self.getDate(), "", "x-amz-acl:" + acl)
         }
         request = requests.put(url, headers=myHeader)
-        return request.content
+        if request.status_code == 200:
+            return ResultMessage.Success
+        else:
+            return ResultMessage.Wrong
 
     # 通过Put方式上传本地文件
     def uploadLocalFile(self, bucket, objectName, filePath):
@@ -90,7 +96,36 @@ class CloudService(object):
                                             self.__contentType__[objectName.split(".")[1]])
         }
         request = requests.put(url, headers=myHeader, data=content)
-        return request.content
+        if request.status_code == 200:
+            return ResultMessage.Success
+        else:
+            return ResultMessage.Wrong
+
+    # 下载已上传的Object到本地
+    def dowmloadFile(self, bucket, objectName, filePath):
+        url = "http://" + self.__host__ + "/" + objectName
+        myHeader = {
+            "Host": bucket + "." + self.__host__,
+            "Date": self.getDate(),
+            "Authorization": self.authorize("GET", bucket, self.getDate(), objectName)
+        }
+        request = requests.get(url, headers=myHeader)
+
+        # 写入文件
+        try:
+            file = open(filePath, "wb")
+            content = request.content
+            file.write(content)
+        except:
+            print("wrong file path")
+            return ResultMessage.FilePathWrong
+        finally:
+            file.close()
+
+        if request.status_code == 200:
+            return ResultMessage.Success
+        else:
+            return ResultMessage.Wrong
 
     # 分享已上传的Object，URL有效期为一周
     def shareFile(self, bucket, objectName, expiration):
@@ -114,23 +149,24 @@ class CloudService(object):
             "Authorization": self.authorize("DELETE", bucket, self.getDate(), objectName)
         }
         request = requests.delete(url, headers=myHeader)
-        return request.content
+        if request.status_code == 200:
+            return ResultMessage.Success
+        else:
+            return ResultMessage.Wrong
 
-    # 创建一组AK/SK
-    def createAkSk(self):
-        pass
-
+    # 获得需要格式的日期
     def getDate(self):
         now = datetime.datetime.now()
         time = now.strftime(self.__timeFormat__)
         return time
 
+    # 计算授权字符串
     def authorize(self, httpVerb, bucket, date, objectName="", amz="", contentType=""):
         CanonicalizedAmzHeaders = ""
         CanonicalizedResource = "/" + bucket + "/" + objectName
 
         # amzHeaders
-        if (amz != ""):
+        if amz != "":
             CanonicalizedAmzHeaders += amz + "\n"
 
         StringToSign = httpVerb + "\n" \
