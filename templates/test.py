@@ -7,7 +7,7 @@ cloudService = CloudService("oos.ctyunapi.cn", "80", "622ff0aad8c78a306eaa",
 
 #print(cloudService.createBucket("lal"))
 #print(cloudService.modifyBucketACL("public-read-write", "lal"))
-print(cloudService.uploadLocalFile("surevil", "remember.txt", "C:\\Users\\zz\\Desktop\\学生组织\\微软\\hackathon.jpg"))
+print(cloudService.uploadLocalFile("surevil", "index.html", "C:\\Users\\zz\\Desktop\\index.html"))
 
 # from templates.UserData.UserDao import UserDao
 # from templates.PO.User import User

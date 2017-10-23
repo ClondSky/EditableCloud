@@ -69,7 +69,7 @@ class CloudService(object):
     def uploadLocalFile(self, bucket, objectName, filePath):
         # 读取文件
         try:
-            file = open(filePath)
+            file = open(filePath, "rb")
             content = file.read()
         except:
             print("wrong file path")
@@ -77,14 +77,14 @@ class CloudService(object):
         finally:
             file.close()
 
-        url = "http://" + self.__host__
+        url = "http://" + self.__host__ + "/" + objectName
         myHeader = {
             "Host": bucket + "." + self.__host__,
             "Date": self.getDate(),
-            "Authorization": self.authorize("PUT /" + objectName, bucket, self.getDate(), objectName, "", content,
-                                            "image/jpeg ")
+            "Content-length": str(len(content)),
+            "Authorization": self.authorize("PUT", bucket, self.getDate(), objectName)
         }
-        request = requests.put(url, headers=myHeader, data=content.encode("utf-8"))
+        request = requests.put(url, headers=myHeader, data=content)
         return request.content
 
     def getDate(self):
@@ -92,23 +92,17 @@ class CloudService(object):
         time = now.strftime(self.__timeFormat__)
         return time
 
-    def authorize(self, httpVerb, bucket, date, objectName="", amz="", content="", contentType=""):
+    def authorize(self, httpVerb, bucket, date, objectName="", amz=""):
         CanonicalizedAmzHeaders = ""
         CanonicalizedResource = "/" + bucket + "/" + objectName
-        content_MD5 = ""
 
         # amzHeaders
         if (amz != ""):
             CanonicalizedAmzHeaders += amz + "\n"
-        # MD5摘要加密
-        if (content != ""):
-            md5 = hashlib.md5()
-            md5.update(content.encode("utf-8"))
-            content_MD5 = md5.hexdigest()
 
         StringToSign = httpVerb + "\n" \
-                       + content_MD5 + "\n" \
-                       + contentType + "\n" \
+                       + "" + "\n" \
+                       + "" + "\n" \
                        + date + "\n" \
                        + CanonicalizedAmzHeaders + CanonicalizedResource
 
