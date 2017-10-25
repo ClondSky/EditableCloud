@@ -12,6 +12,7 @@ cloudService = CloudService("622ff0aad8c78a306eaa",
 # print(cloudService.shareFile("fafaaaa", "index.txt", 7))
 # print(cloudService.deleteFile("fafaaaa", "index.txt"))
 print(cloudService.createAkSk())
+# print(cloudService.updateAkSk("5267b10a021b9fbac2ba"))
 # print(cloudService.deleteBucket("lalaa"))
 
 # from templates.UserData.UserDao import UserDao

@@ -152,12 +152,37 @@ class CloudService(object):
     # 创建一组AK/SK
     def createAkSk(self):
         url = "http://" + self.__keyEndPoint__
+        params = {
+            "Action": "CreateAccessKey"
+        }
         myHeader = {
             "Host": self.__keyEndPoint__,
             "Date": self.getDate(),
             "Authorization": self.authorize("POST", "", self.getDate())
         }
-        request = requests.post(url, headers=myHeader, data={"Action": "CreateAccessKey"})
+        request = requests.post(url, headers=myHeader, data=params)
+        print(request.status_code)
+        print(request.content)
+        if request.status_code == 200:
+            return ResultMessage.Success
+        else:
+            return ResultMessage.Wrong
+
+    # 更改AK/SK属性（主秘钥/普通秘钥）
+    def updateAkSk(self, keyId):
+        url = "http://" + self.__keyEndPoint__
+        params = {
+            "Action": "UpdateAccessKey",
+            "AccessKeyId": keyId,
+            "Status": "active",
+            "isPrimary": "false"
+        }
+        myHeader = {
+            "Host": self.__keyEndPoint__,
+            "Date": self.getDate(),
+            "Authorization": self.authorize("POST", "", self.getDate())
+        }
+        request = requests.post(url, headers=myHeader, data=params)
         print(request.status_code)
         print(request.content)
         if request.status_code == 200:

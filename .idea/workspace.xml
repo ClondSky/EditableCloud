@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2e2dd381-e956-47a1-b833-38b13fda0e69" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/oosApi/OOS.py" afterPath="$PROJECT_DIR$/templates/oosApi/OOS.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/test.py" afterPath="$PROJECT_DIR$/templates/test.py" />
     </list>
@@ -37,11 +36,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="OOS.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="OOS.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/oosApi/OOS.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="358">
-              <caret line="157" column="71" selection-start-line="157" selection-start-column="71" selection-end-line="157" selection-end-column="71" />
+              <caret line="172" column="46" selection-start-line="172" selection-start-column="46" selection-end-line="172" selection-end-column="46" />
               <folding>
                 <element signature="e#24#39#0" expanded="true" />
               </folding>
@@ -79,11 +78,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="test.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="test.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/templates/test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="9" column="22" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="22" />
+            <state relative-caret-position="242">
+              <caret line="11" column="49" selection-start-line="11" selection-start-column="49" selection-end-line="11" selection-end-column="49" />
               <folding />
             </state>
           </provider>
@@ -132,8 +131,8 @@
         <option value="$PROJECT_DIR$/templates/config.json" />
         <option value="$PROJECT_DIR$/templates/UserData/UserDao.py" />
         <option value="$PROJECT_DIR$/templates/ResultMessage.py" />
-        <option value="$PROJECT_DIR$/templates/test.py" />
         <option value="$PROJECT_DIR$/templates/oosApi/OOS.py" />
+        <option value="$PROJECT_DIR$/templates/test.py" />
       </list>
     </option>
   </component>
@@ -705,16 +704,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/UserData/UserDao.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
-          <folding>
-            <element signature="e#25#92#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/ResultMessage.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="132">
@@ -739,21 +728,31 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/test.py">
+    <entry file="file://$PROJECT_DIR$/templates/UserData/UserDao.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="9" column="22" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="22" />
-          <folding />
+        <state relative-caret-position="396">
+          <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+          <folding>
+            <element signature="e#25#92#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/oosApi/OOS.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="358">
-          <caret line="157" column="71" selection-start-line="157" selection-start-column="71" selection-end-line="157" selection-end-column="71" />
+          <caret line="172" column="46" selection-start-line="172" selection-start-column="46" selection-end-line="172" selection-end-column="46" />
           <folding>
             <element signature="e#24#39#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="11" column="49" selection-start-line="11" selection-start-column="49" selection-end-line="11" selection-end-column="49" />
+          <folding />
         </state>
       </provider>
     </entry>
