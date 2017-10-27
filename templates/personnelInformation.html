@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head> 
+<meta charset="utf-8"> 
+<link rel="stylesheet" href="../static/css/personnelInfomation.css" type="text/css">
+
+<title>个人信息</title> 
+</head>
+
+<body>
+
+<form action="" method="post" class="dark-matter">
+    <script>
+        function clickSave(){
+
+            var Email = document.getElementById("email");
+            var number = document.getElementById("number");
+            var cor = document.getElementById("corporation");
+            var contacts = document.getElementById("contacts");
+
+            /**document.getElementById("name").innerHTML =*/
+            alert( "姓名是" + document.getElementById("name").value + "\n" + "邮箱"+ document.getElementById("email").value);
+        }
+        function clickDiscard(){
+            document.getElementById("name").value="";
+            document.getElementById("email").value = "";
+            document.getElementById("number").value = "";
+            document.getElementById("corporation").value = "";
+            document.getElementById("address").value = "";
+            document.getElementById("contacts").value = "";
+            
+            /**alert("结束")*/
+        }
+    </script>
+
+    <h1>
+        个人信息
+    </h1>
+    
+    <div id = "toInput">
+        <label>
+            <span>姓名</span>
+            <input id="name" type="text" name="name" placeholder="请输入姓名" required="required"/>
+        
+        </label>
+
+        <label>
+            <span>电子邮箱</span>
+            <input id="email" type="email" name="email" placeholder="请填写正确的邮箱地址" required="required"/>
+        </label>
+
+        <label>
+            <span>电话号码</span>
+            <input id="number" type="text" name="number" placeholder="请输入电话号码" required="required"/>
+        </label>
+
+        <label>
+            <span>公司名称</span>
+            <input id="corporation" type="text" name="corporation" placeholder="请输入公司名称" />
+        </label>
+
+        <label>
+            <span>地址</span>
+            <input id="address" type="text" name="address" placeholder="请输入地址" />
+        </label>
+
+        <label>
+            <span>联系人</span>
+            <input id="contacts" type="text" name="contacts" placeholder="请填写联系人" />
+        </label>
+    </div>
+
+    <label>
+        <span>&nbsp;</span>
+        <input type="button" class="button" onclick="clickDiscard()" value="撤销"/>
+        <input type="button" class="button" onclick="clickSave()" value="保存" />
+    </label>
+    <label>
+        
+    </label>
+
+</form>
+
+</html>

@@ -3,8 +3,8 @@
     font: 15px "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #D3D3D3;
     text-shadow: 1px 1px 1px #444;
-    border: 0px;
-    background-position: center;
+    margin:-20px -10px -20px -10px;
+    width: 101.4%;
 }
 
 .dark-matter h1 {
@@ -12,7 +12,8 @@
     padding: 10px 10px 10px 40px;
     display: block;
     border-bottom: 1px solid #444;
-    margin:-10px -10px 30px -10px;
+    
+    /**margin:-10px -10px 30px -10px;*/
 }
 .dark-matter h1>span {
     display: block;
@@ -26,12 +27,11 @@
     float: left;
     width: 35%;
     text-align: right;
-    padding-right: 10px;
-    margin-top: 15px;
+    padding-right: 15px;
+    margin-top: 10px;
     font-weight: bold;
 }
 .dark-matter input[type="text"], .dark-matter input[type="email"], .dark-matter textarea, .dark-matter select {
-    
     border: none;
     color: #525252;
     height: 25px;
@@ -94,6 +94,6 @@
     *display: inline;
 }
 .dark-matter .button:hover {
-    color: #333;
-    background-color: #EBEBEB;
+    font-weight: bold;
+    background-color: rgb(176, 190, 190);
 }
