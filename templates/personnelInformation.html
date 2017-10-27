@@ -4,7 +4,81 @@
 <head> 
 <meta charset="utf-8"> 
 <link rel="stylesheet" href="../static/css/personnelInfomation.css" type="text/css">
-
+<script src="../static/js/jquery-1.8.2.min.js" ></script>
+<style>
+    .button{
+        float: left;
+        margin: 1em;
+        padding: 1em 2em;
+        background: none;
+        border: none;
+        position: relative;
+        z-index: 1;
+        font-size: 20px;
+        font-weight: bold;
+        cursor: pointer;
+        display:block;
+        border-width: 3px;
+        border-style: solid;
+        line-height: 36px;
+        border-radius: 8px;
+        -moz-border-radius: 8px;
+        -webkit-border-radius: 8px;
+        overflow:hidden;
+        transition:width 2s;
+        -moz-box-shadow:
+        0 15px 30px 0 rgba(255,255,255,.25) inset,
+        0 2px 7px 0 rgba(0,0,0,.2);
+        -webkit-box-shadow:
+        0 15px 30px 0 rgba(255,255,255,.25) inset,
+        0 2px 7px 0 rgba(0,0,0,.2);
+        box-shadow:
+        0 15px 30px 0 rgba(255,255,255,.25) inset,
+        0 2px 7px 0 rgba(0,0,0,.2);
+        text-shadow: 0 1px 2px rgba(0,0,0,.1);
+        color: #fff;
+        -o-transition:0.4s ease-in; 
+        -webkit-transition:0.4s ease-in; 
+        transition:0.4s ease-in
+    }
+    .button:hover{
+        border-width: 5px;
+        -o-transform:width;
+        -webkit-transform:width;
+        transform:width;
+    }
+    .button::before{
+        content: '';
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        bottom: 0px;
+        right: 0px;
+        background: inherit;
+        border-radius: 8px;
+        z-index: -1;
+        opacity: 0.4;
+        -o-transition:0.4s ease-in; 
+        -webkit-transition:0.4s ease-in; 
+        transition:0.4s ease-in
+    }
+    .button:hover::before{
+        content: '';
+        font-size: 30px;			
+        position: absolute;
+        top: -30px;
+        left: -20px;
+        bottom: -30px;
+        right: -20px;
+        background: #000000;/*调整旋转的颜色改这里*/
+        border-radius: 8px;
+        z-index: -1;
+        opacity: 0.4;
+        -o-transform:rotate(360deg);
+        -webkit-transform:rotate(360deg);
+        transform:rotate(360deg);
+    }
+</style>
 <title>个人信息</title> 
 </head>
 
@@ -13,22 +87,18 @@
 <form action="" method="post" class="dark-matter">
     <script>
         function clickSave(){
-
-            var Email = document.getElementById("email");
-            var number = document.getElementById("number");
-            var cor = document.getElementById("corporation");
-            var contacts = document.getElementById("contacts");
-
-            /**document.getElementById("name").innerHTML =*/
-            alert( "姓名是" + document.getElementById("name").value + "\n" + "邮箱"+ document.getElementById("email").value);
+            var email = $("email");
+            var number = $("number");
+            var cor = $("corporation");
+            var contacts = $("contacts");
         }
         function clickDiscard(){
-            document.getElementById("name").value="";
-            document.getElementById("email").value = "";
-            document.getElementById("number").value = "";
-            document.getElementById("corporation").value = "";
-            document.getElementById("address").value = "";
-            document.getElementById("contacts").value = "";
+            $("name").value="";
+            $("email").value = "";
+            $("number").value = "";
+            $("corporation").value = "";
+            $("address").value = "";
+            $("contacts").value = "";
             
             /**alert("结束")*/
         }
@@ -71,15 +141,11 @@
         </label>
     </div>
 
-    <label>
+    <div>
         <span>&nbsp;</span>
-        <input type="button" class="button" onclick="clickDiscard()" value="撤销"/>
-        <input type="button" class="button" onclick="clickSave()" value="保存" />
-    </label>
-    <label>
-        
-    </label>
-
+        <button class="button" onclick="clickDiscard();">撤销</button>
+        <button class="button" onclick="clickSave();">保存</button>
+    </div>
 </form>
 
 </html>
