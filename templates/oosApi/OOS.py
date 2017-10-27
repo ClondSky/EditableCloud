@@ -3,7 +3,8 @@ import requests
 import datetime
 import time
 import urllib
-import base64, hmac
+import base64
+import hmac
 
 from templates.ResultMessage import ResultMessage
 
@@ -12,18 +13,12 @@ class CloudService(object):
     __contentType__ = {"txt": "text/plain", "jpg": "image/jpeg"}
     __timeFormat__ = "%a, %d %b %G %T %z +0800"
     __endPoint__ = "oos.ctyunapi.cn"
+    __keyEndPoint__ = "oos-iam.ctyunapi.cn"  # 所有AK/SK相关的操作，用此地址
+    __port__ = "80"
 
-    def __init__(self, host, port, ak, sk):
-        self.__host__ = host
-        self.__port__ = port
+    def __init__(self, ak, sk):
         self.__ak__ = ak
         self.__sk__ = sk
-
-    def set_host(self, host):
-        self.__host__ = host
-
-    def get_host(self):
-        return self.__host__
 
     def set_port(self, port):
         self.__port__ = port
@@ -45,9 +40,9 @@ class CloudService(object):
 
     # 创建Bucket
     def createBucket(self, bucket):
-        url = "http://" + self.__host__
+        url = "http://" + self.__endPoint__
         myHeader = {
-            "Host": bucket + "." + self.__host__,
+            "Host": bucket + "." + self.__endPoint__,
             "Content-Length": "0",
             "Date": self.getDate(),
             "Authorization": self.authorize("PUT", bucket, self.getDate())
@@ -60,9 +55,9 @@ class CloudService(object):
 
     # 修改Bucket的权限，即ACL
     def modifyBucketACL(self, acl, bucket):
-        url = "http://" + self.__host__
+        url = "http://" + self.__endPoint__
         myHeader = {
-            "Host": bucket + "." + self.__host__,
+            "Host": bucket + "." + self.__endPoint__,
             "Content-Length": "0",
             "Date": self.getDate(),
             "x-amz-acl": acl,
@@ -86,9 +81,9 @@ class CloudService(object):
         finally:
             file.close()
 
-        url = "http://" + self.__host__ + "/" + objectName
+        url = "http://" + self.__endPoint__ + "/" + objectName
         myHeader = {
-            "Host": bucket + "." + self.__host__,
+            "Host": bucket + "." + self.__endPoint__,
             "Date": self.getDate(),
             "Content-length": str(len(content)),
             "Content-Type": self.__contentType__[objectName.split(".")[1]],
@@ -103,9 +98,9 @@ class CloudService(object):
 
     # 下载已上传的Object到本地
     def dowmloadFile(self, bucket, objectName, filePath):
-        url = "http://" + self.__host__ + "/" + objectName
+        url = "http://" + self.__endPoint__ + "/" + objectName
         myHeader = {
-            "Host": bucket + "." + self.__host__,
+            "Host": bucket + "." + self.__endPoint__,
             "Date": self.getDate(),
             "Authorization": self.authorize("GET", bucket, self.getDate(), objectName)
         }
@@ -142,14 +137,69 @@ class CloudService(object):
 
     # 删除已上传的Object
     def deleteFile(self, bucket, objectName):
-        url = "http://" + self.__host__ + "/" + objectName
+        url = "http://" + self.__endPoint__ + "/" + objectName
         myHeader = {
-            "Host": bucket + "." + self.__host__,
+            "Host": bucket + "." + self.__endPoint__,
             "Date": self.getDate(),
             "Authorization": self.authorize("DELETE", bucket, self.getDate(), objectName)
         }
         request = requests.delete(url, headers=myHeader)
+        if request.status_code == 200 or request.status_code == 204:
+            return ResultMessage.Success
+        else:
+            return ResultMessage.Wrong
+
+    # 创建一组AK/SK
+    def createAkSk(self):
+        url = "http://" + self.__keyEndPoint__
+        params = {
+            "Action": "CreateAccessKey"
+        }
+        myHeader = {
+            "Host": self.__keyEndPoint__,
+            "Date": self.getDate(),
+            "Authorization": self.authorize("POST", "", self.getDate())
+        }
+        request = requests.post(url, headers=myHeader, data=params)
+        print(request.status_code)
+        print(request.content)
         if request.status_code == 200:
+            return ResultMessage.Success
+        else:
+            return ResultMessage.Wrong
+
+    # 更改AK/SK属性（主秘钥/普通秘钥）
+    def updateAkSk(self, keyId):
+        url = "http://" + self.__keyEndPoint__
+        params = {
+            "Action": "UpdateAccessKey",
+            "AccessKeyId": keyId,
+            "Status": "active",
+            "isPrimary": "false"
+        }
+        myHeader = {
+            "Host": self.__keyEndPoint__,
+            "Date": self.getDate(),
+            "Authorization": self.authorize("POST", "", self.getDate())
+        }
+        request = requests.post(url, headers=myHeader, data=params)
+        print(request.status_code)
+        print(request.content)
+        if request.status_code == 200:
+            return ResultMessage.Success
+        else:
+            return ResultMessage.Wrong
+
+    # 删除已创建的Bucket
+    def deleteBucket(self, bucket):
+        url = "http://" + self.__endPoint__
+        myHeader = {
+            "Host": bucket + "." + self.__endPoint__,
+            "Date": self.getDate(),
+            "Authorization": self.authorize("DELETE", bucket, self.getDate())
+        }
+        request = requests.delete(url, headers=myHeader)
+        if request.status_code == 200 or request.status_code == 204:
             return ResultMessage.Success
         else:
             return ResultMessage.Wrong
@@ -161,9 +211,12 @@ class CloudService(object):
         return time
 
     # 计算授权字符串
-    def authorize(self, httpVerb, bucket, date, objectName="", amz="", contentType=""):
+    def authorize(self, httpVerb="GET", bucket="", date="", objectName="", amz="", contentType=""):
         CanonicalizedAmzHeaders = ""
-        CanonicalizedResource = "/" + bucket + "/" + objectName
+        if bucket == "":
+            CanonicalizedResource = ""
+        else:
+            CanonicalizedResource = "/" + bucket + "/" + objectName
 
         # amzHeaders
         if amz != "":
