@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from templates.UserDataService.UserDaoService import UserDaoService
-from templates.PO import DB_session
-from templates.PO.User import User
+from templates.Model import DB_session
+from templates.Model.User import User
 from templates.ResultMessage import ResultMessage
+
 
 class UserDao(UserDaoService):
     def __init__(self):
@@ -30,3 +31,15 @@ class UserDao(UserDaoService):
             return ResultMessage.GetUserWrong
         finally:
             session.close()
+
+    # 保存用户信息
+    def saveUserInfo(self, user):
+        # 一系列数据库操作
+        return user.email + " success"
+
+    # 验证登录
+    def login(self, user):
+        # 一系列数据库操作
+        print(user.userName)
+        print(user.passWord)
+        return "success"

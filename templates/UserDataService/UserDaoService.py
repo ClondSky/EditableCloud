@@ -11,3 +11,9 @@ class UserDaoService(object):
 
     def getUserByUserName(self, userName):
         pass
+
+    def saveUserInfo(self,user):
+        pass
+
+    def login(self, user):
+        pass
