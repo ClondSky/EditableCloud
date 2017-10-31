@@ -3,7 +3,7 @@
 <html lang="en" class="no-js">
 
     <head>
-        
+
         <meta charset="utf-8">
         <title>EditableCloud</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,17 +11,17 @@
         <meta name="author" content="">
 
         <!-- CSS -->
-        <link rel="stylesheet" href="../../static/css/sign_in/reset.css">
-        <link rel="stylesheet" href="../../static/css/sign_in/supersized.css">
-        <link rel="stylesheet" href="../../static/css/sign_in/style.css">
-		<script src="../../static/js/sign_in/jquery-1.8.2.min.js" ></script>
-        <script src="../../static/js/sign_in/supersized.3.2.7.min.js" ></script>
-        <script src="../../static/js/sign_in/supersized-init.js" ></script>
-        <script src="../../static/js/sign_in/regester.js" ></script>
-		<script src="../../static/js/sign_in/log.js" ></script>
-        
-        
-		
+        <link rel="stylesheet" href="../../static/css/regester/reset.css">
+        <link rel="stylesheet" href="../../static/css/regester/supersized.css">
+        <link rel="stylesheet" href="../../static/css/regester/style.css">
+		<script src="../../static/js/regester/jquery-1.8.2.min.js" ></script>
+        <script src="../../static/js/regester/supersized.3.2.7.min.js" ></script>
+        <script src="../../static/js/regester/supersized-init.js" ></script>
+        <script src="../../static/js/regester/regester.js" ></script>
+		<script src="../../static/js/regester/cancel.js" ></script>
+		<script src="../../static/js/regester/send.js" ></script>
+
+
         <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
         <!--[if lt IE 9]>
             <script src="assets/js/html5.js"></script>
@@ -107,17 +107,18 @@
     <body>
 
         <div class="page-container">
-            <h1>sign in</h1>
+            <h1>regester</h1>
             
                 <input type="text" name="username" class="username" placeholder="请输入您的邮箱" id="username">
-                <input type="password" name="password" class="password" placeholder="请输入您的密码" id="password">
-				
-                <input type="Captcha" class="Captcha" name="Captcha" placeholder="请输入验证码">
-				
-                <button class="button" onclick="log()">登录</button>
-				<button class="button" onclick="regester()">注册</button>
+                <input type="password" name="password" class="password" placeholder="请输入密码" id="password">
+                <input type="password" name="password" class="password" placeholder="请再次输入密码" id="againpassword">
+				<button class="button" onclick="send()">发送</button>
+				<p>点击发送按钮，至邮箱处获取验证码
+				<input type="Captcha" class="Captcha" name="Captcha" placeholder="请输入验证码">
+                <button class="button" onclick="regester();">确认</button>
+				<button class="button" onclick="cancel()">取消</button>
                 <div class="error"><span>+</span></div>
-                     
+                      
         </div>	
     </body>
 </html>
