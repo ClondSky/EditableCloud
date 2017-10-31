@@ -1,10 +1,16 @@
 # -*- coding: utf-8 -*-
 from templates.Model import Base
-from sqlalchemy import Column, Integer, CHAR
+from sqlalchemy import Column, Integer, CHAR,TEXT
 
 
 class User(Base):
-    __tablename__ = "User"
-    userName = Column(CHAR(20), primary_key=True)
-    passWord = Column(CHAR(20))
-    email = Column(CHAR(30))
+    __tablename__ = "USER"
+    ID=Column(Integer,primary_key=True,nullable=False)
+    NAME = Column(TEXT,nullable=False)
+    EMAIL = Column(TEXT,nullable=False)
+    PASSWORD = Column(TEXT,nullable=False)
+    PHONE=Column(TEXT)
+    ADDRESS=Column(TEXT)
+    COMPANYNAME=Column(TEXT)
+    LINKMAN=Column(TEXT)
+
