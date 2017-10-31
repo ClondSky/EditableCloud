@@ -1,12 +1,16 @@
-import os
-import boto
+import boto3
+from boto import iam
 
-from boto.s3.key import Key
-from boto.s3.connection import S3Connection
-from boto.s3.connection import Location
-from boto.exception import S3CreateError
+client=boto3.client("iam")
+#conn=iam.connect_to_region(region_name="cn-north-1", aws_access_key_id="c4582dec5d0809103126",
+#                           aws_secret_access_key="47c783687d4c452c5d71b817b8c481915fb0094a",
+#                           )
+response=client.create_access_key(
+    region_name="cn-north-1",
+    aws_access_key_id="c4582dec5d0809103126",
+    aws_secret_access_key="47c783687d4c452c5d71b817b8c481915fb0094a",
+    host='oos-bj2-iam.ctyunapi.cn',
+    UserName="Bob"
+)
+print(response)
 
-conn = boto.connect_s3(aws_access_key_id="622ff0aad8c78a306eaa",
-                       aws_secret_access_key="c4a84bcc4ce1ad09805def0284a07452dd7a7519", host='oos.ctyunapi.cn')
-bucket = conn.get_bucket("surevil")
-print(conn.create_key())

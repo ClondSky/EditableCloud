@@ -10,10 +10,106 @@ from templates.ResultMessage import ResultMessage
 
 
 class CloudService(object):
-    __contentType__ = {"txt": "text/plain", "jpg": "image/jpeg"}
+    __contentType__ = {
+        'html': 'text/html',
+        'htm': 'text/html',
+        'shtml': 'text/html',
+        'css': 'text/css',
+        'xml': 'text/xml',
+        'gif': 'image/gif',
+        'jpeg': 'image/jpeg',
+        'jpg': 'image/jpeg',
+        'js': 'application/x-javascript',
+        'atom': 'application/atom+xml',
+        'rss': 'application/rss+xml',
+        'mml': 'text/mathml',
+        'txt': 'text/plain',
+        'jad': 'text/vnd.sun.j2me.app-descriptor',
+        'wml': 'text/vnd.wap.wml',
+        'htc': 'text/x-component',
+        'png': 'image/png',
+        'tif': 'image/tiff',
+        'tiff': 'image/tiff',
+        'wbmp': 'image/vnd.wap.wbmp',
+        'ico': 'image/x-icon',
+        'jng': 'image/x-jng',
+        'bmp': 'image/x-ms-bmp',
+        'svg': 'image/svg+xml',
+        'svgz': 'image/svg+xml',
+        'webp': 'image/webp',
+        'jar': 'application/java-archive',
+        'war': 'application/java-archive',
+        'ear': 'application/java-archive',
+        'hqx': 'application/mac-binhex40',
+        'doc': 'application/msword',
+        'pdf': 'application/pdf',
+        'ps': 'application/postscript',
+        'eps': 'application/postscript',
+        'ai': 'application/postscript',
+        'rtf': 'application/rtf',
+        'xls': 'application/vnd.ms-excel',
+        'ppt': 'application/vnd.ms-powerpoint',
+        'wmlc': 'application/vnd.wap.wmlc',
+        'kml': 'application/vnd.google-earth.kml+xml',
+        'kmz': 'application/vnd.google-earth.kmz',
+        '7z': 'application/x-7z-compressed',
+        'cco': 'application/x-cocoa',
+        'jardiff': 'application/x-java-archive-diff',
+        'jnlp': 'application/x-java-jnlp-file',
+        'run': 'application/x-makeself',
+        'pl': 'application/x-perl',
+        'pm': 'application/x-perl',
+        'prc': 'application/x-pilot',
+        'pdb': 'application/x-pilot',
+        'rar': 'application/x-rar-compressed',
+        'rpm': 'application/x-redhat-package-manager',
+        'sea': 'application/x-sea',
+        'swf': 'application/x-shockwave-flash',
+        'sit': 'application/x-stuffit',
+        'tcl': 'application/x-tcl',
+        'tk': 'application/x-tcl',
+        'der': 'application/x-x509-ca-cert',
+        'pem': 'application/x-x509-ca-cert',
+        'crt': 'application/x-x509-ca-cert',
+        'xpi': 'application/x-xpinstall',
+        'xhtml': 'application/xhtml+xml',
+        'zip': 'application/zip',
+        'bin': 'application/octet-stream',
+        'exe': 'application/octet-stream',
+        'dll': 'application/octet-stream',
+        'deb': 'application/octet-stream',
+        'dmg': 'application/octet-stream',
+        'eot': 'application/octet-stream',
+        'iso': 'application/octet-stream',
+        'img': 'application/octet-stream',
+        'msi': 'application/octet-stream',
+        'msp': 'application/octet-stream',
+        'msm': 'application/octet-stream',
+        'mid': 'audio/midi',
+        'midi': 'audio/midi',
+        'kar': 'audio/midi',
+        'mp3': 'audio/mpeg',
+        'ogg': 'audio/ogg',
+        'm4a': 'audio/x-m4a',
+        'ra': 'audio/x-realaudio',
+        '3gpp': 'video/3gpp',
+        '3gp': 'video/3gpp',
+        'mp4': 'video/mp4',
+        'mpeg': 'video/mpeg',
+        'mpg': 'video/mpeg',
+        'mov': 'video/quicktime',
+        'webm': 'video/webm',
+        'flv': 'video/x-flv',
+        'm4v': 'video/x-m4v',
+        'mng': 'video/x-mng',
+        'asx': 'video/x-ms-asf',
+        'asf': 'video/x-ms-asf',
+        'wmv': 'video/x-ms-wmv',
+        'avi': 'video/x-msvideo'
+    }
     __timeFormat__ = "%a, %d %b %G %T %z +0800"
-    __endPoint__ = "oos.ctyunapi.cn"
-    __keyEndPoint__ = "oos-iam.ctyunapi.cn"  # 所有AK/SK相关的操作，用此地址
+    __endPoint__ = "oos-bj2.ctyunapi.cn"
+    __keyEndPoint__ = "oos-bj2-iam.ctyunapi.cn"  # 所有AK/SK相关的操作，用此地址
     __port__ = "80"
 
     def __init__(self, ak, sk):
@@ -48,6 +144,7 @@ class CloudService(object):
             "Authorization": self.authorize("PUT", bucket, self.get_date())
         }
         request = requests.put(url, headers=my_header)
+        print(request.content)
         if request.status_code == 200:
             return ResultMessage.Success
         else:
@@ -154,7 +251,6 @@ class CloudService(object):
         url = "http://" + self.__keyEndPoint__
         params = {
             "Action": "CreateAccessKey",
-            "UserName": "445073309@qq.com"
         }
         my_header = {
             "Host": self.__keyEndPoint__,
@@ -205,6 +301,23 @@ class CloudService(object):
         else:
             return ResultMessage.Wrong
 
+    # 分段上传一个本地文件
+    def upload_multipart_file(self, bucket, object_name, file_path):
+        # 初始化文件上传
+        url = "http://" + self.__endPoint__ + "/" + object_name
+        my_header = {
+            "Host": bucket + "." + self.__endPoint__,
+            "Date": self.get_date(),
+            "Authorization": self.authorize("POST"+ "/" + object_name + "?uploads", bucket, self.get_date(), object_name, "",
+                                             uri_resource="?uploads")
+        }
+        request = requests.post(url, headers=my_header, data="uploads")
+        print(request.content)
+        if request.status_code == 200:
+            return ResultMessage.Success
+        else:
+            return ResultMessage.Wrong
+
     # 获得需要格式的日期
     def get_date(self):
         now = datetime.datetime.now()
@@ -212,22 +325,22 @@ class CloudService(object):
         return time
 
     # 计算授权字符串
-    def authorize(self, http_verb="GET", bucket="", date="", object_name="", amz="", content_type=""):
+    def authorize(self, http_verb="GET", bucket="", date="", object_name="", amz="", content_type="", uri_resource=""):
         canonicalized_amz_headers = ""
         if bucket == "":
             canonicalized_resource = ""
         else:
-            canonicalized_resource = "/" + bucket + "/" + object_name
+            canonicalized_resource = "/" + bucket + "/" + object_name + uri_resource
 
         # amzHeaders
         if amz != "":
             canonicalized_amz_headers += amz + "\n"
 
         string_to_sign = http_verb + "\n" \
-                       + "" + "\n" \
-                       + content_type + "\n" \
-                       + date + "\n" \
-                       + canonicalized_amz_headers + canonicalized_resource
+                         + "" + "\n" \
+                         + content_type + "\n" \
+                         + date + "\n" \
+                         + canonicalized_amz_headers + canonicalized_resource
 
         print(string_to_sign)
         signature = base64.b64encode(
