@@ -10,7 +10,7 @@ class UserDao(UserDaoService):
     def __init__(self):
         pass
 
-    def insertUser(self, user):
+    def insert_user(self, user):
         try:
             session = DB_session()
             session.add(user)
@@ -21,10 +21,10 @@ class UserDao(UserDaoService):
         finally:
             session.close()
 
-    def getUserByUserName(self, userName):
+    def get_user_by_username(self, username):
         try:
             session = DB_session()
-            user = session.query(User).filter(User.userName == userName).one()
+            user = session.query(User).filter(User.userName == username).one()
             return user
         except:
             print("getUserByUserName wrong")
@@ -33,7 +33,7 @@ class UserDao(UserDaoService):
             session.close()
 
     # 保存用户信息
-    def saveUserInfo(self, user):
+    def save_user_info(self, user):
         # 一系列数据库操作
         return user.email + " success"
 
