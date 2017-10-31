@@ -39,41 +39,41 @@ class CloudService(object):
         self.__sk__
 
     # 创建Bucket
-    def createBucket(self, bucket):
+    def create_bucket(self, bucket):
         url = "http://" + self.__endPoint__
-        myHeader = {
+        my_header = {
             "Host": bucket + "." + self.__endPoint__,
             "Content-Length": "0",
-            "Date": self.getDate(),
-            "Authorization": self.authorize("PUT", bucket, self.getDate())
+            "Date": self.get_date(),
+            "Authorization": self.authorize("PUT", bucket, self.get_date())
         }
-        request = requests.put(url, headers=myHeader)
+        request = requests.put(url, headers=my_header)
         if request.status_code == 200:
             return ResultMessage.Success
         else:
             return ResultMessage.Wrong
 
     # 修改Bucket的权限，即ACL
-    def modifyBucketACL(self, acl, bucket):
+    def modify_bucket_acl(self, acl, bucket):
         url = "http://" + self.__endPoint__
-        myHeader = {
+        my_header = {
             "Host": bucket + "." + self.__endPoint__,
             "Content-Length": "0",
-            "Date": self.getDate(),
+            "Date": self.get_date(),
             "x-amz-acl": acl,
-            "Authorization": self.authorize("PUT", bucket, self.getDate(), "", "x-amz-acl:" + acl)
+            "Authorization": self.authorize("PUT", bucket, self.get_date(), "", "x-amz-acl:" + acl)
         }
-        request = requests.put(url, headers=myHeader)
+        request = requests.put(url, headers=my_header)
         if request.status_code == 200:
             return ResultMessage.Success
         else:
             return ResultMessage.Wrong
 
     # 通过Put方式上传本地文件
-    def uploadLocalFile(self, bucket, objectName, filePath):
+    def upload_local_file(self, bucket, object_name, file_path):
         # 读取文件
         try:
-            file = open(filePath, "rb")
+            file = open(file_path, "rb")
             content = file.read()
         except:
             print("wrong file path")
@@ -81,34 +81,34 @@ class CloudService(object):
         finally:
             file.close()
 
-        url = "http://" + self.__endPoint__ + "/" + objectName
-        myHeader = {
+        url = "http://" + self.__endPoint__ + "/" + object_name
+        my_header = {
             "Host": bucket + "." + self.__endPoint__,
-            "Date": self.getDate(),
+            "Date": self.get_date(),
             "Content-length": str(len(content)),
-            "Content-Type": self.__contentType__[objectName.split(".")[1]],
-            "Authorization": self.authorize("PUT", bucket, self.getDate(), objectName, "",
-                                            self.__contentType__[objectName.split(".")[1]])
+            "Content-Type": self.__contentType__[object_name.split(".")[1]],
+            "Authorization": self.authorize("PUT", bucket, self.get_date(), object_name, "",
+                                            self.__contentType__[object_name.split(".")[1]])
         }
-        request = requests.put(url, headers=myHeader, data=content)
+        request = requests.put(url, headers=my_header, data=content)
         if request.status_code == 200:
             return ResultMessage.Success
         else:
             return ResultMessage.Wrong
 
     # 下载已上传的Object到本地
-    def dowmloadFile(self, bucket, objectName, filePath):
-        url = "http://" + self.__endPoint__ + "/" + objectName
-        myHeader = {
+    def dowmload_file(self, bucket, object_name, file_path):
+        url = "http://" + self.__endPoint__ + "/" + object_name
+        my_header = {
             "Host": bucket + "." + self.__endPoint__,
-            "Date": self.getDate(),
-            "Authorization": self.authorize("GET", bucket, self.getDate(), objectName)
+            "Date": self.get_date(),
+            "Authorization": self.authorize("GET", bucket, self.get_date(), object_name)
         }
-        request = requests.get(url, headers=myHeader)
+        request = requests.get(url, headers=my_header)
 
         # 写入文件
         try:
-            file = open(filePath, "wb")
+            file = open(file_path, "wb")
             content = request.content
             file.write(content)
         except:
@@ -123,44 +123,45 @@ class CloudService(object):
             return ResultMessage.Wrong
 
     # 分享已上传的Object，URL有效期为一周
-    def shareFile(self, bucket, objectName, expiration):
-        expireTime = str(int(time.time()) + expiration * 24 * 60 * 60)
+    def share_file(self, bucket, object_name, expiration):
+        expire_time = str(int(time.time()) + expiration * 24 * 60 * 60)
         params = urllib.parse.urlencode({
             "AWSAccessKeyId": self.__ak__,
-            "Expires": expireTime,
-            "Signature": self.authorize("GET", bucket, expireTime, objectName).split(":")[1]
+            "Expires": expire_time,
+            "Signature": self.authorize("GET", bucket, expire_time, object_name).split(":")[1]
         })
         return "http://oos.ctyunapi.cn/" \
                + bucket \
-               + "/" + objectName \
+               + "/" + object_name \
                + "?" + params
 
     # 删除已上传的Object
-    def deleteFile(self, bucket, objectName):
-        url = "http://" + self.__endPoint__ + "/" + objectName
-        myHeader = {
+    def delete_file(self, bucket, object_name):
+        url = "http://" + self.__endPoint__ + "/" + object_name
+        my_header = {
             "Host": bucket + "." + self.__endPoint__,
-            "Date": self.getDate(),
-            "Authorization": self.authorize("DELETE", bucket, self.getDate(), objectName)
+            "Date": self.get_date(),
+            "Authorization": self.authorize("DELETE", bucket, self.get_date(), object_name)
         }
-        request = requests.delete(url, headers=myHeader)
+        request = requests.delete(url, headers=my_header)
         if request.status_code == 200 or request.status_code == 204:
             return ResultMessage.Success
         else:
             return ResultMessage.Wrong
 
     # 创建一组AK/SK
-    def createAkSk(self):
+    def create_ak_sk(self):
         url = "http://" + self.__keyEndPoint__
         params = {
-            "Action": "CreateAccessKey"
+            "Action": "CreateAccessKey",
+            "UserName": "445073309@qq.com"
         }
-        myHeader = {
+        my_header = {
             "Host": self.__keyEndPoint__,
-            "Date": self.getDate(),
-            "Authorization": self.authorize("POST", "", self.getDate())
+            "Date": self.get_date(),
+            "Authorization": self.authorize("POST", "", self.get_date())
         }
-        request = requests.post(url, headers=myHeader, data=params)
+        request = requests.post(url, headers=my_header, data=params)
         print(request.status_code)
         print(request.content)
         if request.status_code == 200:
@@ -169,20 +170,20 @@ class CloudService(object):
             return ResultMessage.Wrong
 
     # 更改AK/SK属性（主秘钥/普通秘钥）
-    def updateAkSk(self, keyId):
+    def update_ak_sk(self, key_id):
         url = "http://" + self.__keyEndPoint__
         params = {
             "Action": "UpdateAccessKey",
-            "AccessKeyId": keyId,
+            "AccessKeyId": key_id,
             "Status": "active",
             "isPrimary": "false"
         }
-        myHeader = {
+        my_header = {
             "Host": self.__keyEndPoint__,
-            "Date": self.getDate(),
-            "Authorization": self.authorize("POST", "", self.getDate())
+            "Date": self.get_date(),
+            "Authorization": self.authorize("POST", "", self.get_date())
         }
-        request = requests.post(url, headers=myHeader, data=params)
+        request = requests.post(url, headers=my_header, data=params)
         print(request.status_code)
         print(request.content)
         if request.status_code == 200:
@@ -191,46 +192,46 @@ class CloudService(object):
             return ResultMessage.Wrong
 
     # 删除已创建的Bucket
-    def deleteBucket(self, bucket):
+    def delete_bucket(self, bucket):
         url = "http://" + self.__endPoint__
-        myHeader = {
+        my_header = {
             "Host": bucket + "." + self.__endPoint__,
-            "Date": self.getDate(),
-            "Authorization": self.authorize("DELETE", bucket, self.getDate())
+            "Date": self.get_date(),
+            "Authorization": self.authorize("DELETE", bucket, self.get_date())
         }
-        request = requests.delete(url, headers=myHeader)
+        request = requests.delete(url, headers=my_header)
         if request.status_code == 200 or request.status_code == 204:
             return ResultMessage.Success
         else:
             return ResultMessage.Wrong
 
     # 获得需要格式的日期
-    def getDate(self):
+    def get_date(self):
         now = datetime.datetime.now()
         time = now.strftime(self.__timeFormat__)
         return time
 
     # 计算授权字符串
-    def authorize(self, httpVerb="GET", bucket="", date="", objectName="", amz="", contentType=""):
-        CanonicalizedAmzHeaders = ""
+    def authorize(self, http_verb="GET", bucket="", date="", object_name="", amz="", content_type=""):
+        canonicalized_amz_headers = ""
         if bucket == "":
-            CanonicalizedResource = ""
+            canonicalized_resource = ""
         else:
-            CanonicalizedResource = "/" + bucket + "/" + objectName
+            canonicalized_resource = "/" + bucket + "/" + object_name
 
         # amzHeaders
         if amz != "":
-            CanonicalizedAmzHeaders += amz + "\n"
+            canonicalized_amz_headers += amz + "\n"
 
-        StringToSign = httpVerb + "\n" \
+        string_to_sign = http_verb + "\n" \
                        + "" + "\n" \
-                       + contentType + "\n" \
+                       + content_type + "\n" \
                        + date + "\n" \
-                       + CanonicalizedAmzHeaders + CanonicalizedResource
+                       + canonicalized_amz_headers + canonicalized_resource
 
-        print(StringToSign)
+        print(string_to_sign)
         signature = base64.b64encode(
-            hmac.new(bytes(self.__sk__, encoding="utf-8"), bytes(StringToSign, encoding="utf-8"), "SHA1").digest())
+            hmac.new(bytes(self.__sk__, encoding="utf-8"), bytes(string_to_sign, encoding="utf-8"), "SHA1").digest())
         authorization = "AWS " + self.__ak__ + ":" + str(signature).split('\'')[1]
         print(authorization)
         return authorization

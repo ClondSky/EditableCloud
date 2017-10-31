@@ -6,13 +6,13 @@ class UserDaoService(object):
     __metaclass__ = ABCMeta  # 指定抽象类
 
     @abstractmethod
-    def insertUser(self, user):
+    def insert_user(self, user):
         pass
 
-    def getUserByUserName(self, userName):
+    def get_user_by_username(self, username):
         pass
 
-    def saveUserInfo(self,user):
+    def save_user_info(self,user):
         pass
 
     def login(self, user):
