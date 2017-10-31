@@ -16,7 +16,7 @@ print(cloudService.createAkSk())
 # print(cloudService.deleteBucket("lalaa"))
 
 # from templates.UserData.UserDao import UserDao
-# from templates.PO.User import User
+# from templates.Model.User import User
 
 # user = User(userName="456", passWord="zlz")
 # userService = UserDao()
