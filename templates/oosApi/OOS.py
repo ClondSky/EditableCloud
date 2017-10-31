@@ -248,7 +248,7 @@ class CloudService(object):
 
     # 创建一组AK/SK
     def create_ak_sk(self):
-        url = "http://" + self.__keyEndPoint__
+        url = "http://" + self.__keyEndPoint__+"?Action=CreateAccessKey"
         params = {
             "Action": "CreateAccessKey",
         }
@@ -304,14 +304,15 @@ class CloudService(object):
     # 分段上传一个本地文件
     def upload_multipart_file(self, bucket, object_name, file_path):
         # 初始化文件上传
-        url = "http://" + self.__endPoint__ + "/" + object_name
+        url = "http://" + self.__endPoint__ + "/" + object_name+"?uploads"
         my_header = {
             "Host": bucket + "." + self.__endPoint__,
             "Date": self.get_date(),
-            "Authorization": self.authorize("POST"+ "/" + object_name + "?uploads", bucket, self.get_date(), object_name, "",
+            "Authorization": self.authorize("POST", bucket, self.get_date(), object_name,
                                              uri_resource="?uploads")
         }
-        request = requests.post(url, headers=my_header, data="uploads")
+        request = requests.post(url, headers=my_header)
+        
         print(request.content)
         if request.status_code == 200:
             return ResultMessage.Success
