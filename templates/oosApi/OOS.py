@@ -248,9 +248,9 @@ class CloudService(object):
 
     # 创建一组AK/SK
     def create_ak_sk(self):
-        url = "http://" + self.__keyEndPoint__+"?Action=CreateAccessKey"
+        url = "http://" + self.__keyEndPoint__ + "?Action=CreateAccessKey"
         params = {
-            "Action": "CreateAccessKey",
+            "Action": "CreateAccessKey"
         }
         my_header = {
             "Host": self.__keyEndPoint__,
@@ -304,15 +304,15 @@ class CloudService(object):
     # 分段上传一个本地文件
     def upload_multipart_file(self, bucket, object_name, file_path):
         # 初始化文件上传
-        url = "http://" + self.__endPoint__ + "/" + object_name+"?uploads"
+        url = "http://" + self.__endPoint__ + "/" + object_name + "?uploads"
         my_header = {
             "Host": bucket + "." + self.__endPoint__,
             "Date": self.get_date(),
             "Authorization": self.authorize("POST", bucket, self.get_date(), object_name,
-                                             uri_resource="?uploads")
+                                            uri_resource="?uploads")
         }
         request = requests.post(url, headers=my_header)
-        
+
         print(request.content)
         if request.status_code == 200:
             return ResultMessage.Success
@@ -329,7 +329,7 @@ class CloudService(object):
     def authorize(self, http_verb="GET", bucket="", date="", object_name="", amz="", content_type="", uri_resource=""):
         canonicalized_amz_headers = ""
         if bucket == "":
-            canonicalized_resource = ""
+            canonicalized_resource = "/" + uri_resource
         else:
             canonicalized_resource = "/" + bucket + "/" + object_name + uri_resource
 

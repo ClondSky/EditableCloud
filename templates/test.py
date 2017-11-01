@@ -14,7 +14,7 @@ cloudService = CloudService("c4582dec5d0809103126",
 print(cloudService.create_ak_sk())
 # print(cloudService.updateAkSk("5267b10a021b9fbac2ba"))
 # print(cloudService.deleteBucket("lalaa"))
-print(cloudService.upload_multipart_file("surevil", "index.txt", "C:\\Users\\zz\\Desktop\\index.html"))
+#print(cloudService.upload_multipart_file("surevil", "index.txt", "C:\\Users\\zz\\Desktop\\index.html"))
 
 # from templates.UserData.UserDao import UserDao
 # from templates.Model.User import User

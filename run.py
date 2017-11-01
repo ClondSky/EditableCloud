@@ -19,7 +19,7 @@ app.config['SECRET_KEY'] = 'import_thing'
 
 @app.route('/')
 def show_posts():
-    return render_template('/signIn.html')
+    return render_template('/View/signIn.html')
 
 
 @app.route('/saveUserInfo', methods=['POST', 'GET'])
@@ -34,13 +34,8 @@ def saveUserInfo():
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
-    user = User(userName=request.args.get("userName"),
-                passWord=request.args.get("passWord"),
-                email="none");
-    if (userDao.login(user=user) == "success"):
-        return render_template('/table.html')
-    else:
-        return render_template('login.html')
+    response = {"ResultMessage": "success"}
+    return json.dumps(response)
 
 
 if __name__ == '__main__':
