@@ -1,15 +1,11 @@
 # -*- coding: utf-8 -*-
 from flask import (
     Flask,
-    abort,
-    flash,
-    redirect,
     json,
     render_template,
     request,
-    url_for,
 )
-from templates.Factory.DataFactory import userDao
+from templates.Factory.ServiceFactory import userService
 from templates.Model.User import User
 
 app = Flask(__name__)
@@ -23,23 +19,16 @@ def show_posts():
 
 
 @app.route('/saveUserInfo', methods=['POST', 'GET'])
-def saveUserInfo():
-    data = json.loads(request.form.data, encoding="utf-8")
-    user = User();
-    user.userName = "123"
-    user.passWord = "123"
-    user.email = data["email"]
-    return userDao.saveUserInfo(user=user)
+def save_user_info():
+    pass
 
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
-    user = User(EMAIL=request.args.get("email"),
-                PASSWORD=request.args.get("password"));
-    if (userDao.login(user=user) == "success"):
-        return "success"
-    else:
-        return render_template('login.html')
+    user = User(EMAIL=request.form["email"],
+                PASSWORD=request.form["password"])
+    response = {"ResultMessage": userService.login(user=user)}
+    return json.dumps(response)
 
 
 if __name__ == '__main__':

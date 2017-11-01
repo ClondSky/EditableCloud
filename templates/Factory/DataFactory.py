@@ -1,4 +1,4 @@
 # -*- coding: utf-8 -*-
-from templates.UserData.UserDao import UserDao
+from templates.Data.UserData.UserDao import UserDao
 
-userDao = UserDao();
+userDao = UserDao()

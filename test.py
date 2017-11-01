@@ -16,9 +16,9 @@
 # print(cloudService.deleteBucket("lalaa"))
 #print(cloudService.upload_multipart_file("surevil", "index.txt", "C:\\Users\\zz\\Desktop\\index.html"))
 
-from templates.Factory.DataFactory import userDao
+from templates.Factory.ServiceFactory import userService
 from templates.Model.User import User
 
 user = User(EMAIL="123456789@qq.com", PASSWORD="123456")
 # userDao.insert_user(user)
-print(userDao.login(user))
+print(userService.login(user))

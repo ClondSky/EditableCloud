@@ -14,11 +14,12 @@ function log(){
 				async:true,
 				type:"POST",
 				data:{
-					"username":$("#username")[0].value,
+					"email":$("#username")[0].value,
 					"password":$("#password")[0].value
 				},
 				success:function(result){
-					alert("登录成功");
+				    var ResultMessage=eval("("+result+")").ResultMessage#解析并获取json数据，此处json数据格式为{ResultMessage:Wrong}
+					alert(ResultMessage);
 				},
 				error:function(){
 					alert("服务器错误");
