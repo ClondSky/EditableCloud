@@ -40,6 +40,15 @@ class UserDao(UserDaoService):
     # 验证登录
     def login(self, user):
         # 一系列数据库操作
-        print(user.userName)
-        print(user.passWord)
-        return "success"
+        try:
+            session = DB_session()
+            PASSWORD = session.query(User.PASSWORD).filter(User.EMAIL == user.EMAIL).one()
+            if(PASSWORD[0]==user.PASSWORD):
+                return ResultMessage.Success
+            else:
+                return ResultMessage.Wrong
+        except:
+            print("getUserByUserName wrong")
+            return ResultMessage.GetUserWrong
+        finally:
+            session.close()

@@ -34,8 +34,12 @@ def saveUserInfo():
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
-    response = {"ResultMessage": "success"}
-    return json.dumps(response)
+    user = User(EMAIL=request.args.get("email"),
+                PASSWORD=request.args.get("password"));
+    if (userDao.login(user=user) == "success"):
+        return "success"
+    else:
+        return render_template('login.html')
 
 
 if __name__ == '__main__':

@@ -1,6 +1,6 @@
 ﻿<html>
 <!DOCTYPE html>
-<html lang="en" class="no-js">
+<html lang="en">
 
     <head>
         
@@ -18,7 +18,7 @@
         <script src="../../static/js/sign_in/supersized.3.2.7.min.js" ></script>
         <script src="../../static/js/sign_in/supersized-init.js" ></script>
         <script src="../../static/js/sign_in/regester.js" ></script>
-		<script src="../../static/js/sign_in/log.js" ></script>
+		<!--<script src="../../static/js/sign_in/log.js" ></script>
         
         
 		
@@ -101,9 +101,50 @@
                 transform:rotate(360deg);
             }
         </style>
+		<script>
+	function log(){
+	alert("fsafas")
+	if($(“#username”)[0].value == ''){
+		window.alert('请输入邮箱！')
+	}
+	else if($(“#password”)[0].value==''){
+		window.alert('请输入密码！')
+	}
+	else{
+		$.ajax(
+		{
+			url:'/login',
+			type:'POST', 
+			async:true,
+			data:{
+				"email":$(“#username”)[0].value,
+				"password":$(“#password”)[0].value
+			},
+			dataType:'json',
+			beforeSend:function(xhr){
+				console.log(xhr)
+				console.log('发送前')
+			},
+			success:function(data,textStatus,jqXHR){
+				console.log(data)
+				console.log(textStatus)
+				console.log(jqXHR)
+			},
+			error:function(xhr,textStatus){
+				console.log('错误')
+				console.log(xhr)
+				console.log(textStatus)
+			},
+			complete:function(){
+				console.log('结束')
+			}
+		}
+		)
+		}
+	}
+	</script>
 
     </head>
-
     <body>
 
         <div class="page-container">
@@ -120,5 +161,47 @@
                      
         </div>	
     </body>
+	<script>
+	function log(){
+	alert("fsafas")
+	if($(“#username”)[0].value == ''){
+		window.alert('请输入邮箱！')
+	}
+	else if($(“#password”)[0].value==''){
+		window.alert('请输入密码！')
+	}
+	else{
+		$.ajax(
+		{
+			url:'/login',
+			type:'POST', 
+			async:true,
+			data:{
+				"email":$(“#username”)[0].value,
+				"password":$(“#password”)[0].value
+			},
+			dataType:'json',
+			beforeSend:function(xhr){
+				console.log(xhr)
+				console.log('发送前')
+			},
+			success:function(data,textStatus,jqXHR){
+				console.log(data)
+				console.log(textStatus)
+				console.log(jqXHR)
+			},
+			error:function(xhr,textStatus){
+				console.log('错误')
+				console.log(xhr)
+				console.log(textStatus)
+			},
+			complete:function(){
+				console.log('结束')
+			}
+		}
+		)
+		}
+	}
+	</script>
 </html>
 
