@@ -110,7 +110,7 @@ h2#page-heading {
 	font-size:1.2em;
 	font-weight:bold;
 	color:#1B548D;
-	background:#E6F0F3;
+	background:	#84C1FF;
 	margin:-10px -10px 0 -10px;
 	padding:10px 12px;
 	border-bottom:1px solid #B3CBD6;
@@ -156,6 +156,7 @@ h2#page-heading {
 
 .block {
 	padding-top:20px;
+	
 }
 div.menu {
 	padding:0;
@@ -753,6 +754,7 @@ table.display {
 	margin: 0 auto;
 	clear: both;
 	width: 100%;
+	opacity: 0.5；
 	
 	/* Note Firefox 3.5 and before have a bug with border-collapse
 	 * ( https://bugzilla.mozilla.org/show%5Fbug.cgi?id=155955 ) 
