@@ -4,7 +4,7 @@
     <link rel="stylesheet" type="text/css" href="../../static/css/text.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="../../static/css/grid.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="../../static/css/layout.css" media="screen" />
-
+    <script src="../../static/js/sign_in/jquery-1.8.2.min.js" ></script>
        
     </script>
 </head>
@@ -112,17 +112,18 @@
 	
     <script>
         window.onload=function(){
-			var offsetWidth=0;
-            var aA=document.getElementsByClassName("tomove");
+            var aA=$(".tomove");
+            var initWidth=aA[0].style.width;
             for(var i=0;i<aA.length;i++){
                 aA[i].onmouseover=function(){
                     clearInterval(this.time)
                     var This=this;
                     This.time=setInterval(function(){
-						offsetWidth+=8;
-                        This.style.width=offsetWidth+"px";
                         if(This.offsetWidth>=160){
-                                  clearInterval(This.time)
+                            clearInterval(This.time)
+                        }
+                        else{
+                            This.style.width=This.offsetWidth+8+"px";
                         }
                     },30)
                 }
@@ -131,10 +132,9 @@
                     clearInterval(this.time)
                     var This = this;
                     This.time = setInterval(function () {
-						offsetWidth-=8;
-                        This.style.width = offsetWidth + "px";
-                        if (This.offsetWidth <= 80) {
-                            This.style.width="80px";
+                        This.style.width = This.offsetWidth - 20 + "px";
+                        if(This.offsetWidth <=120) {
+                            This.style.width=initWidth;
                             clearInterval(This.time)
                         }
                     }, 30)
