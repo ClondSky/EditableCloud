@@ -18,7 +18,7 @@ function log(){
 					"password":$("#password")[0].value
 				},
 				success:function(result){
-				    var ResultMessage=eval("("+result+")").ResultMessage#解析并获取json数据，此处json数据格式为{ResultMessage:Wrong}
+				    var ResultMessage=eval("("+result+")").ResultMessage//解析并获取json数据，此处json数据格式为{ResultMessage:Wrong}
 					alert(ResultMessage);
 				},
 				error:function(){
