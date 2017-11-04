@@ -1,6 +1,6 @@
 <html>
 
-    <head>
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,128 +9,153 @@
 
     <title>天翼云———编辑界面</title>
 
-    <!-- Bootstrap Core CSS -->
-    <link href="static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- MetisMenu CSS -->
-    <link href="static/css/metisMenu.min.css" rel="stylesheet">
+    <link href="../../static/css/font-awesome.min.css" rel="stylesheet">
 
-    <!-- Social Buttons CSS -->
-    <link href="static/css/bootstrap-social.css" rel="stylesheet">
-
-    <!-- Custom CSS -->
-    <link href="static/css/sb-admin-2.css" rel="stylesheet">
-
-    <!-- Custom Fonts -->
-	<script src="http://cdn.bootcss.com/jquery/1.9.1/jquery.min.js"></script>
-	
-	<script src="static/js/jquery.min.js"></script>
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-
-    <link rel="apple-touch-icon" href="//mindmup.s3.amazonaws.com/lib/img/apple-touch-icon.png">
-    <link rel="shortcut icon" href="http://mindmup.s3.amazonaws.com/lib/img/favicon.ico">
-    <link href="http://twitter.github.com/bootstrap/assets/js/google-code-prettify/prettify.css" rel="stylesheet">
-    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
-    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css" rel="stylesheet">
     <link href="http://netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" rel="stylesheet">
-   
-	
-	 </head>
-	 
-       <style>
-        #header {
-            background-color:DodgerBlue;
-            color:white;
-            text-align:center;
-            padding:10px;
-			width:100%;
-        }
-        #nav {
-            line-height:30px;
-            background-color:DodgerBlue;
-            height:100%;
-            width:10%;
-            float:left;
-            padding:5px;	
-			text-align:center;
-        }
-        #section {
-            width:85%;
-            float:left;
-            padding:10px;	 	 
-        }
-        #footer {
-		    
-            color:Black;
-            clear:both;
-            text-align:center;
-           padding:5px;	 	 
-        }
-	
+
+    <script src="../../static/js/sign_in/jquery-1.8.2.min.js" ></script>
+
+        <style>
+            #header {
+                color:white;
+                text-align:center;
+                padding:10px;
+                width:90%;
+                float: right;
+            }
+            #nav {
+                line-height:50px;
+                height: 100%;
+                width:10%;
+                float:left;
+                padding:5px;
+                text-align:center;
+            }
+            #section {
+                width:85%;
+                float:left;
+                padding:10px;
+            }
+            #footer {
+                color:Black;
+                clear:both;
+                text-align:center;
+                padding:5px;
+            }
+            p{
+                color: white;
+                height: 5%;
+                border-bottom:1px dotted #ccc;
+            }
+            ul{
+                padding:15px 0;
+                margin: 0;
+                list-style: none;
+                color: white;
+            }
+
+            a{
+                text-decoration: none;
+                display: block;
+                height: 60px;
+                line-height:  60px;
+                padding-left: 12px;
+                cursor: pointer;
+                font-size:  14px;
+                position: relative;
+            }
+            a:hover{
+                text-decoration: none;
+                background-color: white;
+            }
+            .backgroundImg{
+                filter:alpha(Opacity=60);-moz-opacity:0.6;opacity: 0.6; 
+            }
         </style>
 
-    <body>
-       <div id="header">
-          <h1>编辑</h1>
-       </div>
+    <script>
+        window.onload=function(){
+            var aA=$(".tomove");
+            var initWidth=aA[0].style.width;
+            for(var i=0;i<aA.length;i++){
+                aA[i].onmouseover=function(){
+                    clearInterval(this.time)
+                    var This=this;
+                    This.time=setInterval(function(){
+                        This.style.width=This.offsetWidth+8+"px";
+                        if(This.offsetWidth>=160){
+                                  clearInterval(This.time)
+                        }
+                    },30)
+                }
 
-       <div id="nav">
-	      <button type="button" class="btn btn-primary">新建</button><br>  <br>
-		  <button type="button" class="btn btn-primary">打开</button><br>  <br>
-		  <button type="button" class="btn btn-primary">我的文件夹</button><br>  <br>
-		  <button type="button" class="btn btn-primary">分享</button><br>  <br>
-		  <button type="button" class="btn btn-primary">回收站</button><br>  <br>
-       </div>
+                aA[i].onmouseout=function() {
+                    clearInterval(this.time)
+                    var This = this;
+                    This.time = setInterval(function () {
+                        This.style.width = This.offsetWidth - 8 + "px";
+                        if (This.offsetWidth <= 120) {
+                            This.style.width=initWidth;
+                            clearInterval(This.time)
+                        }
+                    }, 30)
+                }
 
-       <div id="section" >
-	   
-	   <div style="width:100%;">
-	    <div class="btn-group">
-        <a class="btn dropdown-toggle" data-toggle="dropdown" title="" data-original-title="Font"><i class="icon-font"></i><b class="caret"></b></a>
-          <ul class="dropdown-menu">
-          <li><a data-edit="fontName Serif" style="font-family:'Serif'">Serif</a></li><li><a data-edit="fontName Sans" style="font-family:'Sans'">Sans</a></li><li><a data-edit="fontName Arial" style="font-family:'Arial'">Arial</a></li><li><a data-edit="fontName Arial Black" style="font-family:'Arial Black'">Arial Black</a></li><li><a data-edit="fontName Courier" style="font-family:'Courier'">Courier</a></li><li><a data-edit="fontName Courier New" style="font-family:'Courier New'">Courier New</a></li><li><a data-edit="fontName Comic Sans MS" style="font-family:'Comic Sans MS'">Comic Sans MS</a></li><li><a data-edit="fontName Helvetica" style="font-family:'Helvetica'">Helvetica</a></li><li><a data-edit="fontName Impact" style="font-family:'Impact'">Impact</a></li><li><a data-edit="fontName Lucida Grande" style="font-family:'Lucida Grande'">Lucida Grande</a></li><li><a data-edit="fontName Lucida Sans" style="font-family:'Lucida Sans'">Lucida Sans</a></li><li><a data-edit="fontName Tahoma" style="font-family:'Tahoma'">Tahoma</a></li><li><a data-edit="fontName Times" style="font-family:'Times'">Times</a></li><li><a data-edit="fontName Times New Roman" style="font-family:'Times New Roman'">Times New Roman</a></li><li><a data-edit="fontName Verdana" style="font-family:'Verdana'">Verdana</a></li></ul>
+            }
+        }
+    </script>
+
+
+    </head>
+
+        <body background="../../static/img/universe.jpg" class="backgroundImg">
+        <div id="header">
+            <h1>编辑</h1>
         </div>
-		<div class="btn-group">
-        <a class="btn dropdown-toggle" data-toggle="dropdown" title="" data-original-title="Font Size"><i class="icon-text-height"></i>&nbsp;<b class="caret"></b></a>
-          <ul class="dropdown-menu">
-          <li><a data-edit="fontSize 5"><font size="5">Huge</font></a></li>
-          <li><a data-edit="fontSize 3"><font size="3">Normal</font></a></li>
-          <li><a data-edit="fontSize 1"><font size="1">Small</font></a></li>
-          </ul>
-      </div>
-        <a class="btn btn-info" data-edit="bold" title="" data-original-title="Bold (Ctrl/Cmd+B)"><i class="icon-bold"></i></a>
-		<a class="btn" data-edit="italic" title="" data-original-title="Italic (Ctrl/Cmd+I)"><i class="icon-italic"></i></a>
-		<a class="btn" data-edit="strikethrough" title="" data-original-title="Strikethrough"><i class="icon-strikethrough"></i></a>
-		<a class="btn" data-edit="underline" title="" data-original-title="Underline (Ctrl/Cmd+U)"><i class="icon-underline"></i></a>
-		<a class="btn btn-info" data-edit="insertunorderedlist" title="" data-original-title="Bullet list"><i class="icon-list-ul"></i></a>
-		<a class="btn" data-edit="insertorderedlist" title="" data-original-title="Number list"><i class="icon-list-ol"></i></a>
-		<a class="btn" data-edit="outdent" title="" data-original-title="Reduce indent (Shift+Tab)"><i class="icon-indent-left"></i></a>
-		<a class="btn" data-edit="indent" title="" data-original-title="Indent (Tab)"><i class="icon-indent-right"></i></a>
-		<a class="btn btn-info" data-edit="justifyleft" title="" data-original-title="Align Left (Ctrl/Cmd+L)"><i class="icon-align-left"></i></a>
-		<a class="btn" data-edit="justifycenter" title="" data-original-title="Center (Ctrl/Cmd+E)"><i class="icon-align-center"></i></a>
-		<a class="btn" data-edit="justifyright" title="" data-original-title="Align Right (Ctrl/Cmd+R)"><i class="icon-align-right"></i></a>
-		<a class="btn" data-edit="justifyfull" title="" data-original-title="Justify (Ctrl/Cmd+J)"><i class="icon-align-justify"></i></a>
-		<a class="btn dropdown-toggle" data-toggle="dropdown" title="" data-original-title="Hyperlink"><i class="icon-link"></i></a>
-		<div class="dropdown-menu input-append">
-			    <input class="span2" placeholder="URL" type="text" data-edit="createLink">
-			    <button class="btn" type="button">Add</button>
-        </div>
-		<a class="btn" data-edit="unlink" title="" data-original-title="Remove Hyperlink"><i class="icon-cut"></i></a>
-		<a class="btn" data-edit="undo" title="" data-original-title="Undo (Ctrl/Cmd+Z)"><i class="icon-undo"></i></a>
-		<a class="btn" data-edit="redo" title="" data-original-title="Redo (Ctrl/Cmd+Y)"><i class="icon-repeat"></i></a>
-		</div>
-		<textarea name="content" ,wrap="hard" style="margin: 0px 0px 10px; width: 100%; height: 100%;"></textarea>
-       </div>
 
-       <div id="footer">
-             Copyright@NJUA642
-       </div>
-</body>
-</html>
+        <div id="nav">
+            <p style="cursor:pointer"><i class="glyphicon glyphicon-user"></i>        我的工作台</p>
+            <p style="cursor:pointer"><i class="fa fa-refresh"></i>        同步</p>
+            <ul>
+                <li><a href="#" class="tomove">打开</a></li>
+                <li><a href="#" class="tomove">最新文档</a></li>
+                <li><a href="#" class="tomove">另存为</a></li>
+                <li><a href="#" class="tomove">云协作</a></li>
+                <li><a href="#" class="tomove">我的分享</a></li>
+                <li><a href="#" class="tomove">回收站</a></li>
+            </ul>
+        </div>
+		
+
+
+        <div id="section">
+            <button><i class="fa fa-font"></i></button>
+            <button><i class="fa fa-bold"></i></button>
+            <button><i class="fa fa-italic"></i></button>
+            <button><i class="fa fa-text-height"></i></button>
+            <button><i class="fa fa-text-width"></i></button>
+            <button><i class="fa fa-align-left"></i></button>
+            <button><i class="fa fa-align-center"></i></button>
+            <button><i class="fa fa-align-right"></i></button>
+            <button><i class="fa fa-align-justify"></i></button>
+            <button><i class="fa fa-list"></i></button>
+            <button><i class="fa fa-dedent"></i></button>
+            <button><i class="fa fa-outdent"></i></button>
+            <button><i class="fa fa-indent"></i></button>
+            <button><i class="fa fa-picture-o"></i></button>
+            <button><i class="fa fa-reorder"></i></button>
+            <button><i class="fa fa-bars"></i></button>
+            <button><i class="fa fa-list-ul"></i></button>
+            <button><i class="fa fa-list-ol"></i></button>
+            <div></div>
+            <textarea name="content" ,wrap="hard" style="margin: 20px 0px 10px; width: 100%; height: 100%;"></textarea>
+        </div>
+
+        <div id="footer">
+            Copyright@NJUA642
+        </div>
+
+        </body>
+    </html>
