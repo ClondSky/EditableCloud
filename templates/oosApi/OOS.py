@@ -6,7 +6,7 @@ import urllib
 import base64
 import hmac
 import math
-import 
+from xml.dom import minidom
 
 from templates.ResultMessage import ResultMessage
 
@@ -314,11 +314,12 @@ class CloudService(object):
                                             uri_resource="?uploads")
         }
         request = requests.post(url, headers=my_header)
-        print(request.content)
-        id=request.content.split("UploadId")[1].split("<")[0].split(">")[1]
+        id = minidom.parseString(request.content.decode("utf-8")) \
+            .getElementsByTagName("UploadId")[0] \
+            .childNodes[0] \
+            .nodeValue
 
-
-        # 开始分段上传
+        # 分段上传
         url = "http://" + self.__endPoint__ + "/" + object_name
         # 读取文件
         try:
@@ -330,21 +331,20 @@ class CloudService(object):
         finally:
             file.close()
         times = math.ceil(len(content) / (20 * pow(2, 20)))
-        print(times)
-        return
-        my_header = {
-            "Host": bucket + "." + self.__endPoint__,
-            "Date": self.get_date(),
-        }
-        params = urllib.parse.urlencode({
-            "partNumber": part_number,
-            "Expires": expire_time,
-            "Signature": self.authorize("GET", bucket, expire_time, object_name).split(":")[1]
-        })
-        if request.status_code == 200:
-            return ResultMessage.Success
-        else:
-            return ResultMessage.Wrong
+
+        for i in range(1, times):
+            my_header = {
+                "Host": bucket + "." + self.__endPoint__,
+                "Date": self.get_date(),
+            }
+            params = urllib.parse.urlencode({
+                "partNumber": i,
+                "UploadId": id
+            })
+            if request.status_code == 200:
+                return ResultMessage.Success
+            else:
+                return ResultMessage.Wrong
 
     # 获得需要格式的日期
     def get_date(self):
