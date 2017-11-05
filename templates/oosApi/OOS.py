@@ -5,6 +5,8 @@ import time
 import urllib
 import base64
 import hmac
+import math
+import 
 
 from templates.ResultMessage import ResultMessage
 
@@ -248,7 +250,7 @@ class CloudService(object):
 
     # 创建一组AK/SK
     def create_ak_sk(self):
-        url = "http://" + self.__keyEndPoint__+"?Action=CreateAccessKey"
+        url = "http://" + self.__keyEndPoint__ + "?Action=CreateAccessKey"
         params = {
             "Action": "CreateAccessKey",
         }
@@ -304,15 +306,41 @@ class CloudService(object):
     # 分段上传一个本地文件
     def upload_multipart_file(self, bucket, object_name, file_path):
         # 初始化文件上传
-        url = "http://" + self.__endPoint__ + "/" + object_name+"?uploads"
+        url = "http://" + self.__endPoint__ + "/" + object_name + "?uploads"
         my_header = {
             "Host": bucket + "." + self.__endPoint__,
             "Date": self.get_date(),
             "Authorization": self.authorize("POST", bucket, self.get_date(), object_name,
-                                             uri_resource="?uploads")
+                                            uri_resource="?uploads")
         }
         request = requests.post(url, headers=my_header)
-        
+        print(request.content)
+        id=request.content.split("UploadId")[1].split("<")[0].split(">")[1]
+
+
+        # 开始分段上传
+        url = "http://" + self.__endPoint__ + "/" + object_name
+        # 读取文件
+        try:
+            file = open(file_path, "rb")
+            content = file.read()
+        except:
+            print("wrong file path")
+            return ResultMessage.FilePathWrong
+        finally:
+            file.close()
+        times = math.ceil(len(content) / (20 * pow(2, 20)))
+        print(times)
+        return
+        my_header = {
+            "Host": bucket + "." + self.__endPoint__,
+            "Date": self.get_date(),
+        }
+        params = urllib.parse.urlencode({
+            "partNumber": part_number,
+            "Expires": expire_time,
+            "Signature": self.authorize("GET", bucket, expire_time, object_name).split(":")[1]
+        })
         print(request.content)
         if request.status_code == 200:
             return ResultMessage.Success
