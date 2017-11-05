@@ -1,0 +1,18 @@
+diff a/.idea/workspace.xml b/.idea/workspace.xml	(rejected hunks)
+@@ -216,12 +216,16 @@
+   </component>
+   <component name="ProjectFrameBounds">
+ <<<<<<< HEAD
++<<<<<<< HEAD
+     <option name="x" value="143" />
+     <option name="y" value="16" />
+ =======
+     <option name="x" value="227" />
+     <option name="y" value="3" />
+ >>>>>>> e83837ade3cd796cc69cc8b7f5235144205a1637
++=======
++    <option name="x" value="83" />
++>>>>>>> master
+     <option name="width" value="1659" />
+     <option name="height" value="1060" />
+   </component>
