@@ -5,6 +5,8 @@ import time
 import urllib
 import base64
 import hmac
+import math
+from xml.dom import minidom
 
 from templates.ResultMessage import ResultMessage
 
@@ -312,12 +314,37 @@ class CloudService(object):
                                             uri_resource="?uploads")
         }
         request = requests.post(url, headers=my_header)
+        id = minidom.parseString(request.content.decode("utf-8")) \
+            .getElementsByTagName("UploadId")[0] \
+            .childNodes[0] \
+            .nodeValue
 
-        print(request.content)
-        if request.status_code == 200:
-            return ResultMessage.Success
-        else:
-            return ResultMessage.Wrong
+        # 分段上传
+        url = "http://" + self.__endPoint__ + "/" + object_name
+        # 读取文件
+        try:
+            file = open(file_path, "rb")
+            content = file.read()
+        except:
+            print("wrong file path")
+            return ResultMessage.FilePathWrong
+        finally:
+            file.close()
+        times = math.ceil(len(content) / (20 * pow(2, 20)))
+
+        for i in range(1, times):
+            my_header = {
+                "Host": bucket + "." + self.__endPoint__,
+                "Date": self.get_date(),
+            }
+            params = urllib.parse.urlencode({
+                "partNumber": i,
+                "UploadId": id
+            })
+            if request.status_code == 200:
+                return ResultMessage.Success
+            else:
+                return ResultMessage.Wrong
 
     # 获得需要格式的日期
     def get_date(self):
