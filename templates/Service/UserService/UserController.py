@@ -14,3 +14,8 @@ class UserController(object):
             return ResultMessage.Success
         else:
             return ResultMessage.Wrong
+
+    def register(self,user):
+        message=userDao.insert_user(user)
+        return message
+

@@ -7,3 +7,4 @@ class ResultMessage(object):
     GetUserWrong = "无法获取用户信息"
     Success = "Success"
     Wrong = "Wrong"
+    UserExist="邮箱已被注册"

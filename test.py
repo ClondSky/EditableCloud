@@ -18,11 +18,24 @@ cloudService = CloudService("c4582dec5d0809103126",
 # print(cloudService.create_ak_sk())
 # print(cloudService.updateAkSk("5267b10a021b9fbac2ba"))
 # print(cloudService.deleteBucket("lalaa"))
-print(cloudService.upload_multipart_file("surevil", "index.txt", "L:\\17.8.4 苏州\\1\\_DSC2331.NEF"))
+#print(cloudService.upload_multipart_file("surevil", "index.txt", "L:\\17.8.4 苏州\\1\\_DSC2331.NEF"))
 
-from templates.Factory.ServiceFactory import userService
-from templates.Model.User import User
+#from templates.Factory.ServiceFactory import userService
+#from templates.Model.User import User
 
 # user = User(EMAIL="123456789@qq.com", PASSWORD="123456")
 # userDao.insert_user(user)
 # print(userService.login(user))
+import sqlite3
+
+conn = sqlite3.connect('TYCloud.db')
+c = conn.cursor()
+
+cursor = c.execute("SELECT ID,NAME,EMAIL,PASSWORD from USER")
+for row in cursor:
+    print("ID = ", row[0])
+    print("NAME = ", row[1])
+    print ("EMAIL = ", row[2])
+    print ("PASSWORD = ", row[3], "\n")
+
+conn.close()

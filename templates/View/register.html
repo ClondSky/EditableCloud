@@ -11,15 +11,15 @@
         <meta name="author" content="">
 
         <!-- CSS -->
-        <link rel="stylesheet" href="../../static/css/regester/reset.css">
-        <link rel="stylesheet" href="../../static/css/regester/supersized.css">
-        <link rel="stylesheet" href="../../static/css/regester/style.css">
-		<script src="../../static/js/regester/jquery-1.8.2.min.js" ></script>
-        <script src="../../static/js/regester/supersized.3.2.7.min.js" ></script>
-        <script src="../../static/js/regester/supersized-init.js" ></script>
-        <script src="../../static/js/regester/regester.js" ></script>
-		<script src="../../static/js/regester/cancel.js" ></script>
-		<script src="../../static/js/regester/send.js" ></script>
+        <link rel="stylesheet" href="../../static/css/register/reset.css">
+        <link rel="stylesheet" href="../../static/css/register/supersized.css">
+        <link rel="stylesheet" href="../../static/css/register/style.css">
+		<script src="../../static/js/register/jquery-1.8.2.min.js" ></script>
+        <script src="../../static/js/register/supersized.3.2.7.min.js" ></script>
+        <script src="../../static/js/register/supersized-init.js" ></script>
+        <script src="../../static/js/register/register.js" ></script>
+		<script src="../../static/js/register/cancel.js" ></script>
+		<script src="../../static/js/register/send.js" ></script>
 
 
         <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -112,10 +112,11 @@
                 <input type="text" name="username" class="username" placeholder="请输入您的邮箱" id="username">
                 <input type="password" name="password" class="password" placeholder="请输入密码" id="password">
                 <input type="password" name="password" class="password" placeholder="请再次输入密码" id="againpassword">
+                <input type="text" name="username" class="username" placeholder="请输入您的姓名" id="name">
 				<button class="button" onclick="send()">发送</button>
 				<p>点击发送按钮，至邮箱处获取验证码
 				<input type="Captcha" class="Captcha" name="Captcha" placeholder="请输入验证码">
-                <button class="button" onclick="regester();">确认</button>
+                <button class="button" onclick="register()">确认</button>
 				<button class="button" onclick="cancel()">取消</button>
                 <div class="error"><span>+</span></div>
                       
