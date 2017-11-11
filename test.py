@@ -16,9 +16,35 @@
 # print(cloudService.deleteBucket("lalaa"))
 #print(cloudService.upload_multipart_file("surevil", "index.txt", "C:\\Users\\zz\\Desktop\\index.html"))
 
-from templates.Factory.ServiceFactory import userService
-from templates.Model.User import User
+#from templates.Factory.ServiceFactory import userService
+#from templates.Model.User import User
 
-user = User(EMAIL="123456789@qq.com", PASSWORD="123456")
+#user = User(EMAIL="123456789@qq.com", PASSWORD="123456")
 # userDao.insert_user(user)
-print(userService.login(user))
+#print(userService.login(user))
+
+import sqlite3
+conn=sqlite3.connect('TYCloud.db')
+c=conn.cursor()
+
+'''c.execute(''CREATE TABLE USER(
+     ID integer PRIMARY KEY AUTOINCREMENT,
+     NAME TEXT,
+     EMAIL TEXT NOT NULL UNIQUE,
+     PASSWORD TEXT NOT NULL,
+     PHONE TEXT,
+     ADDRESS TEXT,
+     COMPANYNAME TEXT,
+     LINKMAN TEXT);'')
+'''
+         
+
+#curson=c.execute("DROP TABLE USER")
+cursor=c.execute("SELECT ID,NAME,EMAIL,PASSWORD from USER")
+for row in cursor:
+   print("ID = ", row[0])
+   print("NAME = ", row[1])
+   print ("EMAIL = ", row[2])
+   print ("PASSWORD = ", row[3], "\n")
+
+conn.close()

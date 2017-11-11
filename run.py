@@ -30,6 +30,22 @@ def login():
     response = {"ResultMessage": userService.login(user=user)}
     return json.dumps(response)
 
+@app.route('/register', methods=['POST', 'GET'])
+def register():
+    user = User(
+                EMAIL=request.form["email"],
+                PASSWORD=request.form["password"],
+                NAME=request.form["name"])
+    response={"ResultMessage":userService.register(user=user)}
+    return json.dumps(response)
+
+@app.route('/register.html')
+def toRegister():
+    return render_template("/View/register.html")
+
+@app.route('/signIn.html')
+def toSignIn():
+    return render_template("/view/signIn.html")
 
 if __name__ == '__main__':
     app.run()

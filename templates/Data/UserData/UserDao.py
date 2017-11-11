@@ -14,9 +14,10 @@ class UserDao(object):
             session = DB_session()
             session.add(user)
             session.commit()
+            return  ResultMessage.Success
         except:
             print("insertUser wrong")
-            return ResultMessage.InsertUserWrong
+            return ResultMessage.UserExist
         finally:
             session.close()
 
@@ -30,4 +31,6 @@ class UserDao(object):
             return ResultMessage.GetUserWrong
         finally:
             session.close()
+
+
 
